@@ -1,0 +1,9 @@
+# include .bashrc if it exists
+# if [ -f $HOME/.bashrc_aliases ]; then
+#     . $HOME/.bashrc_aliases
+# fi
+
+alias vim="nvim"
+alias vi="nvim"
+alias apb="ansible-playbook"
+git config --global core.editor nvim

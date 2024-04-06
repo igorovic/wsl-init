@@ -1,0 +1,11 @@
+---
+- name: WSL config
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+- name: P1
+  import_playbook: user.yaml
+- name: P2
+  import_playbook: wsl-conf.yaml
+  vars:
+    username: "test"

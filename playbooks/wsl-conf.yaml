@@ -1,0 +1,21 @@
+---
+- name: Create wsl.conf
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Create wsl.conf
+      blockinfile:
+        path: /etc/wsl.conf
+        block: |
+          [user]
+          default={{username}}
+
+          [automount]
+          enabled=false
+
+          [interop]
+          enabled=false
+          appendWindowsPath=false
+        create: true
+      permissions: 0664

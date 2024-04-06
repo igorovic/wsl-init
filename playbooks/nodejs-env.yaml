@@ -1,0 +1,15 @@
+---
+- name: NodeJs
+  hosts: localhost
+  connection: localhost
+  gather_facts: false
+  tasks:
+    - name: Install nvm
+      ansible.builtin.shell:
+        cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    - name: Install node with nvm
+      shell: source "$(find /home /root -name nvm.sh)" && nvm install --lts && nvm use --lts
+      args:
+        executable: /bin/bash
+
+      
