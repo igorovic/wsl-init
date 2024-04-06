@@ -2,8 +2,9 @@
 # if [ -f $HOME/.bashrc_aliases ]; then
 #     . $HOME/.bashrc_aliases
 # fi
-
+alias tmux="tmux -2u"
 alias vim="nvim"
 alias vi="nvim"
 alias apb="ansible-playbook"
+alias tmux="tmux -2u"
 git config --global core.editor nvim

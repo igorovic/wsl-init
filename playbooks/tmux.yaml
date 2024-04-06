@@ -1,7 +1,0 @@
----
-- name: Tmux setup
-  hosts: localhost
-  connection: localhost
-  gather_facts: false
-  tasks:
-  

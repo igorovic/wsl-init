@@ -4,14 +4,5 @@
   connection: localhost
   gather_facts: false
   tasks:
-    # - name: Ensure the locale exists
-    #   locale_gen:
-    #     name: en_US.UTF-8
-    #     state: present
-    # - name: Set as default locale
-    #   command: localectl set-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
     - name: Install tmux
-      ansible.builtin.import_tasks: ./tasks/tmux.ansible.yaml
-    - name: Clean apt
-      ansible.builtin.apt:
-        clean: true
+      ansible.builtin.import_tasks: ./tasks/tmux-plugin-manager.ansible.yaml

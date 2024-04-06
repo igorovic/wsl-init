@@ -1,4 +1,4 @@
-# WSL setup 
+## WSL setup 
 
 Download the desired tarball here `https://cloud-images.ubuntu.com/wsl/` 
 
@@ -11,3 +11,41 @@ In your WSL git clone this repo and execute the initial script.
 ```bash
 /bin/bash setup.sh
 ```
+
+## Docker container setup
+
+### Build 
+
+```bash
+docker build -t dyve/ubuntu-dev-base:latest --progress plain --file ./Docker/Dockerfile.ubuntu-dev-base .
+```
+
+### Start container 
+
+```bash
+# container does not exists -- this will create the container
+docker run -it --name ubuntu-dev --mount type=bind,source=./,target=/setup dyve/ubuntu-dev-base:latest
+# container already exists 
+docker start -ia ubuntu-dev
+```
+
+## Neovim config
+
+The nvim lua files go inside `~/.config/nvim/` 
+
+
+## Nerd fonts
+
+For nerd fonts you need to install the patched versions on your host. (Not in the container or WSL)
+
+Then configure the nerd font in your terminal. This step depends on your terminal app. 
+
+
+## Misc Notes
+
+### Ansible linter
+
+- Files must have the `*.ansible.yaml` for the linter to activate. Otherwise it will be considered as a simple `.yaml` file. 
+- Files inside `**/tasks/*` folder are recognized as `tasks definitions` by the ansible linter. 
+- Files inside `playbooks/*` are recognized as `playbooks` 
+- 

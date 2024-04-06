@@ -1,0 +1,14 @@
+- name: Verify nvm exists
+  ansible.builtin.command: which nvm
+    register: nvm
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ nvm }}"
+# - name: Install nvm
+#   ansible.builtin.get_url:
+#     url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh
+#     dest: /tmp/nvm_install.sh
+#     mode: "0755"
+# - name: Install node with nvm
+#   ansible.builtin.command:
+#     cmd: source "$(find /home /root -name nvm.sh)" && nvm install --lts && nvm use --lts

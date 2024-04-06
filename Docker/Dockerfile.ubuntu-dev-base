@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/devcontainers/base:ubuntu22.04
+
+RUN <<EOF
+apt-get update
+apt-get upgrade
+apt-get install -y software-properties-common
+apt-get update
+apt-get install -y ansible jq unzip tmux
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+ln -s /usr/bin/python3 /usr/bin/python
+# for the most recent version of neovim
+wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz -O /usr/bin/nvim-linux64.tar.gz
+cd /usr/bin/
+tar xzvf nvim-linux64.tar.gz
+ln -s /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+EOF
+
+# !!! `\n\` is important
+RUN echo 'if [ -f $HOME/.bashrc_aliases ]; then\n\
+    . $HOME/.bashrc_aliases\n\
+fi' >> ~/.bashrc
+
+COPY ../alias/bashrc_aliases /root/.bashrc_aliases
+COPY ../confs/.tmux.conf /root/.tmux.conf
