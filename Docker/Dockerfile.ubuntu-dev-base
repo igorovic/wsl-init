@@ -5,31 +5,44 @@ apt-get update
 apt-get upgrade
 apt-get install -y software-properties-common
 apt-get update
-apt-get install -y ansible jq unzip tmux bash-completion
+apt-get install -y jq unzip tmux bash-completion
 # for more recent version of neovim
 wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz -O /usr/bin/nvim-linux64.tar.gz
 cd /usr/bin/
 tar xzvf nvim-linux64.tar.gz
 ln -s /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+mkdir /DEV
 EOF
 
 
 RUN <<EOF
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-ln -s /usr/bin/python3 /usr/bin/python
-apt-get install pip
-pip install pynvim
-mkdir ~/.config
-git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 EOF
 
-RUN wget https://starship.rs/install.sh -O /tmp/starship-install.sh && /bin/sh /tmp/starship-install.sh --yes
-# RUN ln -s /setup/nvim .config/nvim
+RUN git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm /root/.tmux/plugins/tpm
 
+RUN wget https://starship.rs/install.sh -O /tmp/starship-install.sh && /usr/bin/sh /tmp/starship-install.sh --yes
+
+COPY ../confs/.tmux.conf /root/.tmux.conf
+RUN /usr/bin/bash -c /root/.tmux/plugins/tpm/bin/install_plugins
+
+# nvim lua setup
+WORKDIR /root
+RUN [ -d .config ] || mkdir .config
+WORKDIR /root/.config
+RUN <<EOF
+git init -b main
+git config --local core.sparseCheckout true
+git remote add -f origin https://github.com/igorovic/wsl-init.git
+echo "nvim" >> .git/info/sparse-checkout
+git pull origin main
+EOF
+
+WORKDIR /root
 # !!! `\n\` is important
 RUN echo 'if [ -f $HOME/.bashrc_aliases ]; then\n\
     . $HOME/.bashrc_aliases\n\
-fi' >> ~/.bashrc
+fi' >> /root/.bashrc
 
 COPY ../alias/bashrc_aliases /root/.bashrc_aliases
-COPY ../confs/.tmux.conf /root/.tmux.conf
+WORKDIR /DEV

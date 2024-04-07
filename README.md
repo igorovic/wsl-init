@@ -24,7 +24,7 @@ docker build -t dyve/ubuntu-dev-base:latest --progress plain --file ./Docker/Doc
 
 ```bash
 # FIRST RUN: container does not exists -- this will create the container
-docker run -it --name ubuntu-dev -p :3000-3020 --mount type=bind,source=./,target=/setup dyve/ubuntu-dev-base:latest
+docker run -it --name ubuntu-dev -p 3000-3020:3000-3020 --mount type=bind,source=./,target=/setup dyve/ubuntu-dev-base:latest
 # container already exists 
 docker start -ia ubuntu-dev
 ```
