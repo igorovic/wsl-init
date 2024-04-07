@@ -26,3 +26,8 @@ keymap.set("n", "<leader>j", "<cmd>wincmd h<CR>", { desc = "Go to left split" })
 keymap.set("n", "<leader>l", "<cmd>wincmd l<CR>", { desc = "Go to right split" })
 keymap.set("n", "<leader>k", "<cmd>wincmd j<CR>", { desc = "Go to below split" })
 keymap.set("n", "<leader>i", "<cmd>wincmd k<CR>", { desc = "Go to above split" })
+
+-- move lines - Vscode like
+keymap.set("n", "MK", "<cmd>m .-2<CR>==", { desc = "Move current line up 1" })
+keymap.set("n", "KM", "<cmd>m .+1<CR>==", { desc = "Move current line down 1" })
+

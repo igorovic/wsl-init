@@ -33,12 +33,42 @@ docker start -ia ubuntu-dev
 
 The nvim lua files go inside `~/.config/nvim/` 
 
+## Terminal Setup
 
-## Nerd fonts
+### Nerd fonts
 
 For nerd fonts you need to install the patched versions on your host. (Not in the container or WSL)
 
 Then configure the nerd font in your terminal. This step depends on your terminal app. 
+
+### Mouse reporting
+
+You need to enable mouse reporting in your terminal if you want to resize tmux panels with your mouse.
+
+
+## VIM healthcheck
+
+Show usefull information about your environment.
+
+```vimcmd
+:checkhealth
+```
+
+### Colors issues in Tmux
+
+Some nvim plugin uses `TERM` environment variable so I had to manually define it inside a Docker container to fix colors issues.
+
+```bash
+export TERM=xterm-256color
+```
+
+The following tmux options where not sufficient. 
+
+```bash
+# ~/.tmux.conf
+set -g default-terminal "screen-256color"
+set-option -sa terminal-features ',xterm-256color:RGB'
+```
 
 
 ## Misc Notes

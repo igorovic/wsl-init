@@ -35,9 +35,7 @@ return {
         "tailwindcss",
         "svelte",
         "lua_ls",
-        --"graphql",
         "emmet_ls",
-        --"prismals",
         "ruff_lsp",
       },
     })
@@ -46,9 +44,7 @@ return {
       ensure_installed = {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
-        "isort", -- python formatter
-        "black", -- python formatter
-        "pylint",
+        "ruff_lsp",
         "eslint_d",
       },
     })
