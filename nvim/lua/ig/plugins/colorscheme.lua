@@ -1,5 +1,6 @@
 return {
-  "folke/tokyonight.nvim",
+  "catppuccin/nvim",
+  name = "catppuccin",
   priority = 1000,
   config = function()
     --[[
@@ -33,7 +34,9 @@ return {
         colors.fg_sidebar = fg_dark
       end
     })
-    ]]--
-    vim.cmd("colorscheme tokyonight")
+    ]]
+    
+    -- setup must be called before loading
+    vim.cmd.colorscheme "catppuccin"
   end
 }

@@ -6,5 +6,6 @@ alias tmux="tmux -2u"
 alias vim="nvim"
 alias vi="nvim"
 alias apb="ansible-playbook"
-alias tmux="tmux -2u"
 git config --global core.editor nvim
+eval "$(starship init bash)"
+source /etc/profile.d/bash_completion.sh
