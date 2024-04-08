@@ -4,3 +4,4 @@ alias vim="nvim"
 alias apb="ansible-playbook"
 git config --global core.editor nvim
 eval "$(starship init zsh)"
+

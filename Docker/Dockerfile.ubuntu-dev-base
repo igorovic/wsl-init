@@ -16,12 +16,10 @@ chsh -s /bin/zsh root
 chsh -s /bin/zsh vscode
 EOF
 
-RUN <<EOF
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-EOF
 
 USER vscode
 WORKDIR /home/vscode
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 RUN [ -d .config ] || mkdir .config \ 
     && git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm /home/vscode/.tmux/plugins/tpm
 
@@ -47,9 +45,12 @@ COPY ../confs/.zprofile /home/vscode/.zprofile
 # # !!! `\n\` is important
 RUN echo 'if [ -f $HOME/.zprofile ]; then\n\
     . $HOME/.zprofile\n\
+fi\n\
+if [ -z "$TMUX" ]\n\
+then\n\
+    tmux attach -t TMUX || tmux new -s TMUX\n\
 fi' >> /home/vscode/.zshrc
 
-#COPY ../alias/bashrc_aliases /root/.bashrc_aliases
-#WORKDIR /DEV
+
 
 CMD [ "/bin/zsh" ]
