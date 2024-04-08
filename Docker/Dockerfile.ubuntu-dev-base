@@ -51,6 +51,6 @@ then\n\
     tmux attach -t TMUX || tmux new -s TMUX\n\
 fi' >> /home/vscode/.zshrc
 
-
+RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
 CMD [ "/bin/zsh" ]
