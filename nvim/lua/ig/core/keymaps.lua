@@ -22,10 +22,10 @@ keymap.set("n", "<leader>tl", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tj", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
-keymap.set("n", "<leader>j", "<cmd>wincmd h<CR>", { desc = "Go to left split" })
-keymap.set("n", "<leader>l", "<cmd>wincmd l<CR>", { desc = "Go to right split" })
-keymap.set("n", "<leader>k", "<cmd>wincmd j<CR>", { desc = "Go to below split" })
-keymap.set("n", "<leader>i", "<cmd>wincmd k<CR>", { desc = "Go to above split" })
+keymap.set("n", "<C-j>", "<cmd>wincmd h<CR>", { desc = "Go to left split" })
+keymap.set("n", "<C-l>", "<cmd>wincmd l<CR>", { desc = "Go to right split" })
+keymap.set("n", "<C-k>", "<cmd>wincmd j<CR>", { desc = "Go to below split" })
+keymap.set("n", "<C-i>", "<cmd>wincmd k<CR>", { desc = "Go to above split" })
 
 -- move lines - Vscode like
 keymap.set("n", "MK", "<cmd>m .-2<CR>==", { desc = "Move current line up 1" })

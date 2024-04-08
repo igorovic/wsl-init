@@ -5,31 +5,34 @@ apt-get update
 apt-get upgrade
 apt-get install -y software-properties-common
 apt-get update
-apt-get install -y jq unzip tmux bash-completion
+apt-get install -y jq unzip tmux bash-completion zsh
 # for more recent version of neovim
 wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz -O /usr/bin/nvim-linux64.tar.gz
 cd /usr/bin/
 tar xzvf nvim-linux64.tar.gz
 ln -s /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
 mkdir /DEV
+chsh -s /bin/zsh root
+chsh -s /bin/zsh vscode
 EOF
-
 
 RUN <<EOF
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 EOF
 
-RUN git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm /root/.tmux/plugins/tpm
+USER vscode
+WORKDIR /home/vscode
+RUN [ -d .config ] || mkdir .config \ 
+    && git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm /home/vscode/.tmux/plugins/tpm
 
 RUN wget https://starship.rs/install.sh -O /tmp/starship-install.sh && /usr/bin/sh /tmp/starship-install.sh --yes
 
-COPY ../confs/.tmux.conf /root/.tmux.conf
-RUN /usr/bin/bash -c /root/.tmux/plugins/tpm/bin/install_plugins
+COPY ../confs/.tmux.conf /home/vscode/.tmux.conf
+RUN /usr/bin/bash -c /home/vscode/.tmux/plugins/tpm/bin/install_plugins
 
 # nvim lua setup
-WORKDIR /root
 RUN [ -d .config ] || mkdir .config
-WORKDIR /root/.config
+WORKDIR /home/vscode/.config
 RUN <<EOF
 git init -b main
 git config --local core.sparseCheckout true
@@ -38,11 +41,15 @@ echo "nvim" >> .git/info/sparse-checkout
 git pull origin main
 EOF
 
-WORKDIR /root
-# !!! `\n\` is important
-RUN echo 'if [ -f $HOME/.bashrc_aliases ]; then\n\
-    . $HOME/.bashrc_aliases\n\
-fi' >> /root/.bashrc
 
-COPY ../alias/bashrc_aliases /root/.bashrc_aliases
-WORKDIR /DEV
+WORKDIR /home/vscode
+COPY ../confs/.zprofile /home/vscode/.zprofile
+# # !!! `\n\` is important
+RUN echo 'if [ -f $HOME/.zprofile ]; then\n\
+    . $HOME/.zprofile\n\
+fi' >> /home/vscode/.zshrc
+
+#COPY ../alias/bashrc_aliases /root/.bashrc_aliases
+#WORKDIR /DEV
+
+CMD [ "/bin/zsh" ]
