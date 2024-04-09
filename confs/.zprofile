@@ -1,3 +1,4 @@
+alias ll="ls -lha"
 alias tmux="tmux -2u"
 alias vim="nvim"
 #alias vi="nvim"
