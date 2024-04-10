@@ -49,7 +49,7 @@ chown $user:$user $ZPROFILE && chmod 0644 $ZPROFILE
 sudo -u $user /usr/bin/bash -c $USER_HOME/.tmux/plugins/tpm/bin/install_plugins
 sudo -u $user /usr/bin/bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
 
-# 🚨 check if .zshrc exists or create one
+# check if .zshrc exists or create one
 if [ ! -f $HOME/.zprofile ]; then
     cp ../confs/zshrc.zsh-template $USER_HOME/.zshrc
     chown $user:$user $USER_HOME/.zshrc

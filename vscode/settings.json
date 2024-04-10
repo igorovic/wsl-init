@@ -1,0 +1,37 @@
+{
+    "workbench.sideBar.location": "right",
+    "editor.fontFamily": "GeistMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 13,
+    "vim.leader": "<space>",
+    "vim.useSystemClipboard": true,
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["<C-j>"],
+            "commands": [
+                "workbench.action.focusLeftGroup",
+            ],
+            "silent": true
+        },
+        {
+            "before": ["<C-l>"],
+            "commands": [
+                "workbench.action.focusRightGroup",
+            ],
+            "silent": true
+        },
+        {
+            "before": ["<C-i>"],
+            "commands": [
+                "workbench.action.focusAboveGroup",
+            ],
+            "silent": true
+        },
+        {
+            "before": ["<C-k>"],
+            "commands": [
+                "workbench.action.focusBelowGroup",
+            ],
+            "silent": true
+        },
+    ]
+}

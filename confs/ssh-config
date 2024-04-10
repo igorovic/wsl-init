@@ -1,0 +1,5 @@
+Host gitlab.com
+   ForwardAgent yes
+
+Host github.com
+   ForwardAgent yes

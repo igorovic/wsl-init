@@ -16,31 +16,42 @@ chsh -s /bin/zsh root
 chsh -s /bin/zsh vscode
 EOF
 
+# create the use
+# This is important if we want to use the ssh-agent
 
-USER vscode
+# RUN groupadd --gid ${UID} ${USER} \
+#     && adduser --uid ${UID} --gid ${UID} ${USER}
+ARG UID=1000
+ENV SSH_AUTH_SOCK=/ssh-agent
+RUN /usr/sbin/groupmod -g ${UID} vscode \
+    && /usr/sbin/usermod -u ${UID} -g ${UID} vscode
+
+
+
 WORKDIR /home/vscode
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 RUN [ -d .config ] || mkdir .config \ 
     && git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm /home/vscode/.tmux/plugins/tpm
 
-RUN wget https://starship.rs/install.sh -O /tmp/starship-install.sh && /usr/bin/sh /tmp/starship-install.sh --yes
+RUN wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes
 
 COPY ../confs/.tmux.conf /home/vscode/.tmux.conf
-RUN /usr/bin/bash -c /home/vscode/.tmux/plugins/tpm/bin/install_plugins
 
 # nvim lua setup
 RUN [ -d .config ] || mkdir .config
 WORKDIR /home/vscode/.config
 RUN <<EOF
+git config --global --add safe.directory /home/vscode/.config
 git init -b main
 git config --local core.sparseCheckout true
 git remote add -f origin https://github.com/igorovic/wsl-init.git
 echo "nvim" >> .git/info/sparse-checkout
 git pull origin main
+git config --global --unset safe.directory
 EOF
 
 
 WORKDIR /home/vscode
+COPY ../confs/ssh-config /home/vscode/.ssh/config
 COPY ../confs/.zprofile /home/vscode/.zprofile
 # # !!! `\n\` is important
 RUN echo 'if [ -f $HOME/.zprofile ]; then\n\
@@ -52,5 +63,13 @@ RUN echo 'if [ -f $HOME/.zprofile ]; then\n\
     fi' >> /home/vscode/.zshrc
 
 RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+
+# need to change ownership after changing user's UID
+RUN chown -R vscode:vscode /home/vscode
+
+USER vscode
+# 🚨 The following installations need to execute in the user's profile
+RUN /usr/bin/bash -c /home/vscode/.tmux/plugins/tpm/bin/install_plugins
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 CMD [ "/bin/zsh" ]

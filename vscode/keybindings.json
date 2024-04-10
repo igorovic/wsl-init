@@ -1,0 +1,53 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+0",
+        "command": "terminal.focus",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "workbench.action.lastEditorInGroup",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "-workbench.action.lastEditorInGroup"
+    },
+    {
+        "key": "ctrl+[BracketRight]",
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "!filesExplorerFocus"
+    },
+    {
+        "key": "ctrl+[BracketRight]",
+        "command": "workbench.action.lastEditorInGroup",
+        "when": "filesExplorerFocus"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.terminal.focusNext",
+        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.terminal.focus",
+        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+    },
+    {
+        "key": "a",
+        "command": "explorer.newFile",
+        "when": "filesExplorerFocus"
+    },
+    {
+        "key": "d",
+        "command": "explorer.newFolder",
+        "when": "filesExplorerFocus"
+    },
+    {
+        // to close a terminal simply ctrl+D
+        "key": "ctrl+shift+D",
+        "command": "workbench.action.terminal.new",
+        "when": "terminalFocus"
+    }
+]

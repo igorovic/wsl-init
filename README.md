@@ -28,7 +28,7 @@ docker run -it --name ubuntu-dev -p 3000-3020:3000-3020 --mount type=bind,source
 # container already exists 
 docker start -ia ubuntu-dev
 ```
-
+ 
 ## Tmux
 
 First time you start tmux `tpm` plugin is not automatically installed. You need to 
