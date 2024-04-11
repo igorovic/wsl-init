@@ -28,24 +28,24 @@ return {
       -- list of servers for mason to install
       ensure_installed = {
         "tsserver",
-        "astro",
+        --"astro",
         "dockerls",
         "html",
         "cssls",
-        "tailwindcss",
-        "svelte",
+        --"tailwindcss",
+        --"svelte",
         "lua_ls",
-        "emmet_ls",
-        "ruff_lsp",
+        --"emmet_ls",
+        --"ruff_lsp",
       },
     })
 
     mason_tool_installer.setup({
       ensure_installed = {
-        "prettier", -- prettier formatter
+        --"prettier", -- prettier formatter
         "stylua", -- lua formatter
-        "ruff_lsp",
-        "eslint_d",
+        --"ruff_lsp",
+        --"eslint_d",
       },
     })
   end,

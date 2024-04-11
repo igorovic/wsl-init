@@ -71,5 +71,6 @@ USER vscode
 # 🚨 The following installations need to execute in the user's profile
 RUN /usr/bin/bash -c /home/vscode/.tmux/plugins/tpm/bin/install_plugins
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN mkdir /home/vscode/dev
 
 CMD [ "/bin/zsh" ]
