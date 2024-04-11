@@ -44,7 +44,9 @@ git config --global --add safe.directory /home/vscode/.config
 git init -b main
 git config --local core.sparseCheckout true
 git remote add -f origin https://github.com/igorovic/wsl-init.git
-echo "nvim" >> .git/info/sparse-checkout
+echo "/*\n\
+!/*/\n\
+nvim\n" >> .git/info/sparse-checkout
 git pull origin main
 git config --global --unset safe.directory
 EOF

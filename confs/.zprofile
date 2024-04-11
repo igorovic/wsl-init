@@ -9,6 +9,7 @@ eval "$(starship init zsh)"
 git config --global user.email "$GIT_USER_EMAIL"
 git config --global user.name "$GIT_USER_NAME"
 
+# function found online
 () {
     # add our local functions dir to the fpath
     local funcs=$HOME/.zfunc
