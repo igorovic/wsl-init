@@ -90,4 +90,3 @@ set-option -sa terminal-features ',xterm-256color:RGB'
 - Files must have the `*.ansible.yaml` for the linter to activate. Otherwise it will be considered as a simple `.yaml` file. 
 - Files inside `**/tasks/*` folder are recognized as `tasks definitions` by the ansible linter. 
 - Files inside `playbooks/*` are recognized as `playbooks` 
-- 
