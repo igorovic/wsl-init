@@ -1,6 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# to load custom functions 
+fpath=(~/.zfunc "${fpath[@]}")
+
+echo -ne "\e[1 q" # set cursor as blinking block
+
 # Can manage local plugins
 zplug "~/.zsh", from:local
 

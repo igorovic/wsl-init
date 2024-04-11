@@ -37,12 +37,12 @@
     {
         "key": "a",
         "command": "explorer.newFile",
-        "when": "filesExplorerFocus"
+        "when": "filesExplorerFocus && !inputFocus"
     },
     {
         "key": "d",
         "command": "explorer.newFolder",
-        "when": "filesExplorerFocus"
+        "when": "filesExplorerFocus && !inputFocus"
     },
     {
         // to close a terminal simply ctrl+D

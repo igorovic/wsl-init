@@ -1,0 +1,5 @@
+[container]
+format = '''[$symbol \[$name\]]($style) 
+'''
+symbol = "\uf308" 
+style = "blue dimmed"
