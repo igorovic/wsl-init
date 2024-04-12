@@ -1,4 +1,0 @@
-#
-# Load additional zsh plugins for nodeJs dev
-#
-plugins($(echo $plugins) nvm node)

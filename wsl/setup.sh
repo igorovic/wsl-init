@@ -3,7 +3,7 @@
 apt-get update \
 && apt-get upgrade\
 && apt-get install -y software-properties-common gcc make \
-&& apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzf
+&& apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzfa wget 
 # for more recent version of neovim
 wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
 tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
