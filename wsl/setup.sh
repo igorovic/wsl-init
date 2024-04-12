@@ -2,8 +2,8 @@
 
 apt-get update \
 && apt-get upgrade\
-&& apt-get install -y software-properties-common \
-&& apt-get install -y jq git unzip tmux bash-completion zsh gcc make exa ripgrep zoxide
+&& apt-get install -y software-properties-common gcc make \
+&& apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzf
 # for more recent version of neovim
 wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
 tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -67,6 +67,7 @@ sudo -u $user /usr/bin/bash -c "curl -o- https://raw.githubusercontent.com/nvm-s
 # Install oh-my-zsh for the right user (not necessary root)
 cp -f ../confs/zshrc.template "$USER_HOME/.zshrc"
 sudo -u $user /usr/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --keep-zshrc --unattended"
+zoxide init zsh >> "$USER_HOME/.zshrc"
 
 
 # ENSURE OWNERSHIP FOR NEW USER

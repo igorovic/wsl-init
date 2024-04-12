@@ -82,6 +82,29 @@ set -g default-terminal "screen-256color"
 set-option -sa terminal-features ',xterm-256color:RGB'
 ```
 
+## Security
+
+Use `gpg` and [`pass`](https://www.passwordstore.org/). 
+
+**initialize gpg keys**
+
+```bash
+# This will ask for a passphrase which will be your master password
+gpg --full-generate-key
+```
+
+**initialize password-store**
+
+```bash
+# show your gpg id - will use this id to configure password-store
+gpg -k
+pass init <your gpg id - output by gpg -k>
+```
+
+
+
+
+
 
 ## Misc Notes
 
