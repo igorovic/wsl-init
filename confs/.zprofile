@@ -1,3 +1,5 @@
+alias ls="exa"
+alias grep="rg"
 alias ll="ls -lha"
 alias tmux="tmux -2u"
 alias vim="nvim"
@@ -5,7 +7,7 @@ alias vim="nvim"
 alias apb="ansible-playbook"
 git config --global core.editor nvim
 eval "$(starship init zsh)"
-
+eval "$(zoxide init zsh)"
 git config --global user.email "$GIT_USER_EMAIL"
 git config --global user.name "$GIT_USER_NAME"
 
@@ -23,3 +25,9 @@ git config --global user.name "$GIT_USER_NAME"
         autoload ${=$(cd "$funcs" && echo *)}
     fi
 }
+
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+

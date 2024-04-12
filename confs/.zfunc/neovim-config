@@ -1,0 +1,9 @@
+cd "$HOME/.config"
+git config --global --add safe.directory "$HOME/.config"
+git init -b main
+git config --local core.sparseCheckout true
+git remote add -f origin https://github.com/igorovic/wsl-init.git
+git config --global --unset safe.directory
+echo "nvim" >> .git/info/sparse-checkout
+git pull origin main
+cd "$HOME"
