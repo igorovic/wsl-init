@@ -1,21 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu22.04
 
-RUN <<EOF
-apt-get update
-apt-get upgrade
-apt-get install -y software-properties-common
-apt-get update
-apt-get install -y jq unzip tmux bash-completion zsh zplug
-# for more recent version of neovim
-wget https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz -O /usr/bin/nvim-linux64.tar.gz
-cd /usr/bin/
-tar xzvf nvim-linux64.tar.gz
-ln -s /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
-mkdir /DEV
-chsh -s /bin/zsh root
-chsh -s /bin/zsh vscode
-EOF
+RUN apt update \
+    && apt upgrade -y
 
+RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh 
 # create the use
 # This is important if we want to use the ssh-agent
 
@@ -27,6 +15,6 @@ RUN /usr/sbin/groupmod -g ${UID} vscode \
     && /usr/sbin/usermod -u ${UID} -g ${UID} vscode
 
 
-USER vscode
+#USER vscode
 
-CMD [ "/bin/zsh" ]
+#CMD [ "/bin/zsh" ]

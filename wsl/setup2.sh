@@ -93,7 +93,7 @@ install_tmux_plugins(){
 }
 
 update_nvim_config(){
-  fi [[ ! -d "$REPO_CLONE" ]]; then
+  if [[ ! -d "$REPO_CLONE" ]]; then
     clone_repo
   fi
   cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
