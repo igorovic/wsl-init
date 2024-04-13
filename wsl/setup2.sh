@@ -145,5 +145,5 @@ update_custom_functions
 # install_starship
 # clean
 if [[ -f "/.dockerenv" ]];then
-  cat /.dockerenv
+  sudo cat /.dockerenv
 fi
