@@ -110,15 +110,16 @@ update_nvim_config(){
   cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
 }
 
-continue='N'
+continue_as_root='N'
 if [[ "root" == "$(id -u -n)"]]; then
   printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
   printf 'This will install customizations for root user!\n'
-  read -p "Continue as 'root'? [y/N]" continue
+  read -p "Continue as 'root'? [y/N]" continue_as_root
+  echo $continue_as_root
+  if [[ $continue_as_root != 'y' || $continue_as_root != 'Y' ]]; then
+    exit
+  fi
   exit
-  # if [[ $continue != 'y' || $continue != 'Y' ]]; then
-  #   exit
-  # fi
 fi
 
 sudo install_deps
