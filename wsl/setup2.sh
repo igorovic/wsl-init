@@ -47,14 +47,14 @@ GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
 clone_repo(){
-    if [[ -d "$REPO_CLONE"]]; then
-      rm -rf "$REPO_CLONE"
+    if [[ -d "$REPO_CLONE" ]]; then
+      sudo rm -rf "$REPO_CLONE"
     fi
     git clone --depth=1 --filter=blob:none --single-branch "$GITURL.git" $REPO_CLONE
 }
 
 clean(){
-  rm -rf "$REPO_CLONE"
+  sudo rm -rf "$REPO_CLONE"
 }
 update_configs(){
   # .zshrc
