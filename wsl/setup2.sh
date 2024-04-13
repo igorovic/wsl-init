@@ -144,4 +144,6 @@ update_custom_functions
 # update_nvim_config
 # install_starship
 # clean
-[ -f "/.dockerenv" ] && cat /.dockerenv
+if [[ -f "/.dockerenv" ]];then
+  cat /.dockerenv
+fi
