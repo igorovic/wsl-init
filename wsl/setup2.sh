@@ -91,7 +91,7 @@ setup_wsl(){
 download_tmux_plugins(){
   CONFIGDIR="$HOME/.config"
   [ -d $CONFIGDIR ] || mkdir -p $CONFIGDIR
-  git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm 
+  git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm > /dev/null
 }
 
 update_nvim_config(){

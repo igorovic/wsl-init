@@ -12,7 +12,7 @@ ARG UID=1000
 ENV SSH_AUTH_SOCK=/ssh-agent
 RUN /usr/sbin/groupmod -g ${UID} vscode \
     && /usr/sbin/usermod -u ${UID} -g ${UID} vscode
-
+RUN chown -R ${UID}:${UID} /home/vscode
 
 USER vscode
 RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
