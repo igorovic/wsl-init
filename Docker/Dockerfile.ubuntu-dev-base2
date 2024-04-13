@@ -1,13 +1,17 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu22.04
 
 RUN apt update \
-    && apt upgrade -y && apt install -y curl
+    && apt upgrade -y 
 
+RUN apt install -y gcc make jq git unzip tmux zsh exa ripgrep fzf wget pass
+RUN wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz \
+    && tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz \
+    && ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim \
+    && ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+RUN curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | /bin/bash
 # create the use
 # This is important if we want to use the ssh-agent
 
-# RUN groupadd --gid ${UID} ${USER} \
-#     && adduser --uid ${UID} --gid ${UID} ${USER}
 ARG UID=1000
 ENV SSH_AUTH_SOCK=/ssh-agent
 RUN /usr/sbin/groupmod -g ${UID} vscode \
@@ -15,6 +19,6 @@ RUN /usr/sbin/groupmod -g ${UID} vscode \
 RUN chown -R ${UID}:${UID} /home/vscode
 
 USER vscode
-RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
+# RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
 
 CMD [ "/bin/zsh" ]

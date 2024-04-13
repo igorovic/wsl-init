@@ -2,21 +2,19 @@
 set -e 
 
 install_deps(){
-  sudo apt-get update 
-  sudo apt-get upgrade
-  sudo apt-get install -y software-properties-common gcc make 
-  sudo apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep fzf wget pass
+  apt-get update 
+  apt-get upgrade
+  apt-get install -y software-properties-common gcc make 
+  apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
   # for more recent version of neovim
-  sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
-  sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
-  sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
-  sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
-  # -s keeps args to pass to the install script
-  #curl -sS https://starship.rs/install.sh | /bin/sh -s -- --yes
-  wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /bin/sudo /usr/bin/sh /tmp/starship-install.sh --yes 
-  sudo rm /tmp/starship-install.sh
+  wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
+  tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
+  ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+  ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+  wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes 
+  rm /tmp/starship-install.sh
   # MUST install from source for last version
-  sudo curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | /bin/bash
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | /bin/bash
 }
 
 # Utilities
@@ -60,15 +58,15 @@ update_configs(){
   # .zshrc
   wget -O "$HOME/.zshrc" "$GITRAWURL/main/confs/zshrc.template"
   # .vimrc
-  wget -N -O "$HOME/.vimrc" "$GITRAWURL/main/confs/vimrc"
+  wget -O "$HOME/.vimrc" "$GITRAWURL/main/confs/vimrc"
   # .tmux.conf
-  wget -N -O "$HOME/.tmux.conf" "$GITRAWURL/main/confs/.tmux.conf"
+  wget -O "$HOME/.tmux.conf" "$GITRAWURL/main/confs/.tmux.conf"
   # .zprofile
-  wget -N -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
+  wget -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
   # .ssh-config
-  wget -N -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
+  wget -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
   # starship.toml
-  wget -N -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
+  wget -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
 }
 
 update_custom_functions(){
@@ -104,7 +102,7 @@ update_nvim_config(){
   cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
 }
 
-install_deps
+sudo install_deps
 uninstall_ohmyzsh
 update_configs
 update_custom_functions
