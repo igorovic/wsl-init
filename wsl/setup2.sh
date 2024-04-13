@@ -13,7 +13,8 @@ install_deps(){
   sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
   # -s keeps args to pass to the install script
   #curl -sS https://starship.rs/install.sh | /bin/sh -s -- --yes
-  sudo wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes && sudo rm /tmp/starship-install.sh
+  sudo wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes 
+  sudo rm /tmp/starship-install.sh
   # MUST install from source for last version
   sudo curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | /bin/bash
 }
