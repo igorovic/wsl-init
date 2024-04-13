@@ -11,9 +11,11 @@ install_deps(){
   tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
   ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
   ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
-  curl -sS https://starship.rs/install.sh | /bin/sh --yes
+  # -s keeps args to pass to the install script
+  #curl -sS https://starship.rs/install.sh | /bin/sh -s -- --yes
+  wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes && rm /tmp/starship-install.sh
   # MUST install from source for last version
-  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | /bin/bash
 }
 
 # Utilities
