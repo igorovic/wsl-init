@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu22.04
 
 RUN apt update \
-    && apt upgrade -y
+    && apt upgrade -y && apt install -y curl
 
-RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh 
+RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
 # create the use
 # This is important if we want to use the ssh-agent
 
