@@ -116,7 +116,7 @@ setup_wsl(){
 }
 
 install_tmux_plugins(){
-  CONFIGDIR="$USER_HOME/.config"
+  CONFIGDIR="$HOME/.config"
   [ -d $CONFIGDIR ] || mkdir $CONFIGDIR
   git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm 
   /usr/bin/bash -c $HOME/.tmux/plugins/tpm/bin/install_plugins
