@@ -5,14 +5,15 @@ install_deps(){
   apt-get update \
   && apt-get upgrade\
   && apt-get install -y software-properties-common gcc make \
-  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzf wget 
+  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep  fzf wget pass
   # for more recent version of neovim
   wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
   tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
   ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
   ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
   curl -sS https://starship.rs/install.sh | sh
-#curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash --yes
+  # MUST install from source for last version
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 }
 
 # Utilities
@@ -42,10 +43,13 @@ user=""
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
-clone_repoo(){
-    git clone "$GITURL.git" $REPO_CLONE
+clone_repo(){
+    git clone --depth=1 --filter=blob:none --single-branch "$GITURL.git" $REPO_CLONE
 }
 
+clean(){
+  rm -rf "$REPO_CLONE"
+}
 update_configs(){
   # .zshrc
   wget -O "$HOME/.zshrc" "$GITRAWURL/main/confs/zshrc.template"
@@ -59,6 +63,11 @@ update_configs(){
   wget -N -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
   # starship.toml
   wget -N -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
+}
+
+update_custom_functions(){
+  clone_repo 
+  cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/.zfunc"
 }
 
 uninstall_ohmyzsh(){
@@ -83,9 +92,20 @@ install_tmux_plugins(){
   /usr/bin/bash -c $HOME/.tmux/plugins/tpm/bin/install_plugins
 }
 
-#install_deps
-#uninstall_ohmyzsh
-#update_configs
+update_nvim_config(){
+  fi [[ ! -d "$REPO_CLONE" ]]; then
+    clone_repo
+  fi
+  cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
+}
+
+install_deps
+uninstall_ohmyzsh
+update_configs
+update_custom_functions
+install_tmux_plugins
+update_nvim_config
+clean
 
 main(){
     read -p "Create user (leave empty to skip) : " user
