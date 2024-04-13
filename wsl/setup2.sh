@@ -2,10 +2,10 @@
 set -e 
 
 install_deps(){
-  sudo apt-get update \
-  && apt-get upgrade\
-  && apt-get install -y software-properties-common gcc make \
-  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep fzf wget pass
+  sudo apt-get update 
+  sudo apt-get upgrade
+  sudo apt-get install -y software-properties-common gcc make 
+  sudo apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep fzf wget pass
   # for more recent version of neovim
   sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
   sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
