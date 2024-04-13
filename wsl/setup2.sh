@@ -112,13 +112,13 @@ update_nvim_config(){
 
 continue='N'
 if [[ "root" == "$(id -u -n)"]]; then
-  printf 'Your are running as %s %s\n' $FMT_RED 'root'
-  printf '%s' $FMT_RESET
+  printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
   printf 'This will install customizations for root user!\n'
   read -p "Continue as 'root'? [y/N]" continue
-  if [[ $continue != 'y' || $continue != 'Y' ]]; then
-    exit
-  fi
+  exit
+  # if [[ $continue != 'y' || $continue != 'Y' ]]; then
+  #   exit
+  # fi
 fi
 
 sudo install_deps
