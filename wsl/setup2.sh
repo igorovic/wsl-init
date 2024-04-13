@@ -139,11 +139,11 @@ fi
 
 uninstall_ohmyzsh
 update_configs
-update_custom_functions
+#update_custom_functions
 # download_tmux_plugins
 # update_nvim_config
 # install_starship
 # clean
-if [[ -f "/.dockerenv" ]];then
-  sudo cat /.dockerenv
-fi
+# if [[ -f "/.dockerenv" ]];then
+#   sudo cat /.dockerenv
+# fi
