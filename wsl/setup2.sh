@@ -55,6 +55,13 @@ update_configs(){
   wget -N -O "$HOME/.config/starship.toml" "$GITURL/main/confs/starship.toml"
 }
 
+uninstall_ohmyzsh(){
+  uninstall_script="$HOME/.oh-my-zsh/tools/uninstall.sh"
+  if [[ -f $uninstall_script ]]; then
+    /bin/bash $uninstall_script
+  fi
+}
+
 setup_wsl(){
   # wsl.conf
   wget -N -O "/etc/wsl.con" "$GITURL/main/confs/wsl.conf"
@@ -63,6 +70,8 @@ setup_wsl(){
   sed -i "s/{{user}}/$user/g" /etc/wsl.conf
 }
 
+#uninstall_ohmyzsh
+update_configs
 
 main(){
     read -p "Create user (leave empty to skip) : " user
