@@ -5,7 +5,7 @@ install_deps(){
   sudo apt-get update \
   && apt-get upgrade\
   && apt-get install -y software-properties-common gcc make \
-  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep  fzf wget pass
+  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep fzf wget pass
   # for more recent version of neovim
   sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
   sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -20,33 +20,6 @@ install_deps(){
 }
 
 # Utilities
-user_can_sudo() {
-  # Check if sudo is installed
-  command_exists sudo || return 1
-  # Termux can't run sudo, so we can detect it and exit the function early.
-  case "$PREFIX" in
-  *com.termux*) return 1 ;;
-  esac
-  # The following command has 3 parts:
-  #
-  # 1. Run `sudo` with `-v`. Does the following:
-  #    • with privilege: asks for a password immediately.
-  #    • without privilege: exits with error code 1 and prints the message:
-  #      Sorry, user <username> may not run sudo on <hostname>
-  #
-  # 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
-  #    password is not required, the command will finish with exit code 0.
-  #    If one is required, sudo will exit with error code 1 and print the
-  #    message:
-  #    sudo: a password is required
-  #
-  # 3. Check for the words "may not run sudo" in the output to really tell
-  #    whether the user has privileges or not. For that we have to make sure
-  #    to run `sudo` in the default locale (with `LANG=`) so that the message
-  #    stays consistent regardless of the user's locale.
-  #
-  ! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
-}
 join_paths() {
   # source: https://www.baeldung.com/linux/concatenate-strings-to-build-path#a-generic-solution-that-handles-special-cases
    base_path=${1}
@@ -115,11 +88,10 @@ setup_wsl(){
   sed -i "s/{{user}}/$user/g" /etc/wsl.conf
 }
 
-install_tmux_plugins(){
+download_tmux_plugins(){
   CONFIGDIR="$HOME/.config"
-  [ -d $CONFIGDIR ] || mkdir $CONFIGDIR
+  [ -d $CONFIGDIR ] || mkdir -p $CONFIGDIR
   git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm 
-  /usr/bin/bash -c $HOME/.tmux/plugins/tpm/bin/install_plugins
 }
 
 update_nvim_config(){
@@ -133,7 +105,7 @@ install_deps
 uninstall_ohmyzsh
 update_configs
 update_custom_functions
-install_tmux_plugins
+download_tmux_plugins
 update_nvim_config
 clean
 
