@@ -1,16 +1,19 @@
 #!/bin/bash
 set -e 
 
-# apt-get update \
-# && apt-get upgrade\
-# && apt-get install -y software-properties-common gcc make \
-# && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzf wget 
-# # for more recent version of neovim
-# wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
-# tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
-# ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
-# ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+install_deps(){
+  apt-get update \
+  && apt-get upgrade\
+  && apt-get install -y software-properties-common gcc make \
+  && apt-get install -y jq git unzip tmux bash-completion zsh exa ripgrep zoxide fzf wget 
+  # for more recent version of neovim
+  wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
+  tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
+  ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+  ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+  curl -sS https://starship.rs/install.sh | sh
 #curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash --yes
+}
 
 # Utilities
 join_paths() {
@@ -31,28 +34,31 @@ TMPDIR=${TMPDIR:-'/tmp/'}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
 # macOS does not have getent, but this works even if $HOME is unset
 HOME="${HOME:-$(eval echo ~$USER)}"
+REPO="igorovic/wsl-init"
 REPO_CLONE=$(join_paths $TMPDIR "/wsl-init")
 CURRENT_DIR=$(pwd)
 user=""
-GITURL="https://raw.githubusercontent.com/igorovic/wsl-init"
+
+GITRAWURL="https://raw.githubusercontent.com/$REPO"
+GITURL="https://github.com/$REPO"
 
 clone_repoo(){
-    git clone https://github.com/igorovic/wsl-init.git $REPO_CLONE
+    git clone "$GITURL.git" $REPO_CLONE
 }
 
 update_configs(){
   # .zshrc
-  #wget -O "$HOME/.zshrc" https://github.com/igorovic/wsl-init/blob/main/confs/zshrc.template
+  wget -O "$HOME/.zshrc" "$GITRAWURL/main/confs/zshrc.template"
   # .vimrc
-  wget -N -O "$HOME/.vimrc" "$GITURL/main/confs/vimrc"
+  wget -N -O "$HOME/.vimrc" "$GITRAWURL/main/confs/vimrc"
   # .tmux.conf
-  wget -N -O "$HOME/.tmux.conf" "$GITURL/main/confs/.tmux.conf"
+  wget -N -O "$HOME/.tmux.conf" "$GITRAWURL/main/confs/.tmux.conf"
   # .zprofile
-  wget -N -O "$HOME/.zprofile" "$GITURL/main/confs/.zprofile"
+  wget -N -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
   # .ssh-config
-  wget -N -O "$HOME/.ssh/config" "$GITURL/main/confs/ssh-config"
+  wget -N -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
   # starship.toml
-  wget -N -O "$HOME/.config/starship.toml" "$GITURL/main/confs/starship.toml"
+  wget -N -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
 }
 
 uninstall_ohmyzsh(){
@@ -64,14 +70,22 @@ uninstall_ohmyzsh(){
 
 setup_wsl(){
   # wsl.conf
-  wget -N -O "/etc/wsl.con" "$GITURL/main/confs/wsl.conf"
+  wget -N -O "/etc/wsl.con" "$GITRAWURL/main/confs/wsl.conf"
   chmod 0764 /etc/wsl.conf
   chown root:root /etc/wsl.conf
   sed -i "s/{{user}}/$user/g" /etc/wsl.conf
 }
 
+install_tmux_plugins(){
+  CONFIGDIR="$USER_HOME/.config"
+  [ -d $CONFIGDIR ] || mkdir $CONFIGDIR
+  git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm 
+  /usr/bin/bash -c $HOME/.tmux/plugins/tpm/bin/install_plugins
+}
+
+#install_deps
 #uninstall_ohmyzsh
-update_configs
+#update_configs
 
 main(){
     read -p "Create user (leave empty to skip) : " user
@@ -101,9 +115,6 @@ main(){
     # 🚨 Switch to user
     # Find user who is running as sudo
     USER_HOME=$(getent passwd $user | cut -d: -f6)
-    CONFIGDIR="$USER_HOME/.config"
-    [ -d $CONFIGDIR ] || mkdir $CONFIGDIR
-    git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $USER_HOME/.tmux/plugins/tpm 
     chown -R $user:$user $USER_HOME/.tmux
     wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes 
 
