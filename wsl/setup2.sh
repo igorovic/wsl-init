@@ -138,10 +138,10 @@ if [[ "root" == "$(id -u -n)" ]]; then
 fi
 
 uninstall_ohmyzsh
-# update_configs
-# update_custom_functions
+update_configs
+update_custom_functions
 # download_tmux_plugins
 # update_nvim_config
 # install_starship
 # clean
-cat /.dockerenv
+[ -f "/.dockerenv" ] && cat /.dockerenv
