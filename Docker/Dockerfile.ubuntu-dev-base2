@@ -19,6 +19,6 @@ RUN /usr/sbin/groupmod -g ${UID} vscode \
 RUN chown -R ${UID}:${UID} /home/vscode
 
 USER vscode
-# RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
+RUN curl -sSf https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
 
 CMD [ "/bin/zsh" ]
