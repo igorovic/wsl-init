@@ -31,6 +31,7 @@ command_exists(){
     command -v "$@" >/dev/null 2>&1
 }
 
+
 USER=${USER:-$(id -u -n)}
 TMPDIR=${TMPDIR:-'/tmp/'}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
@@ -40,6 +41,13 @@ REPO="igorovic/wsl-init"
 REPO_CLONE=$(join_paths $TMPDIR "/wsl-init")
 CURRENT_DIR=$(pwd)
 user=""
+# colors
+FMT_RED=$(printf '\033[31m')
+FMT_GREEN=$(printf '\033[32m')
+FMT_YELLOW=$(printf '\033[33m')
+FMT_BLUE=$(printf '\033[34m')
+FMT_BOLD=$(printf '\033[1m')
+FMT_RESET=$(printf '\033[0m')
 
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
@@ -77,7 +85,7 @@ update_custom_functions(){
 uninstall_ohmyzsh(){
   uninstall_script="$HOME/.oh-my-zsh/tools/uninstall.sh"
   if [[ -f $uninstall_script ]]; then
-    /bin/bash $uninstall_script
+    command "$(echo $0)" $uninstall_script
   fi
 }
 
@@ -101,6 +109,16 @@ update_nvim_config(){
   fi
   cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
 }
+
+continue='N'
+if [[ "root" == "$(id -u -n)"]]; then
+  printf 'Your are running as %s %s\n' $FMT_RED 'root'
+  printf 'This will install customizations for root user!\n'
+  read -p "Continue as 'root'? [y/N]" continue
+  if [[ $continue != 'y' || $continue != 'Y' ]]; then
+    exit
+  fi
+fi
 
 sudo install_deps
 uninstall_ohmyzsh
