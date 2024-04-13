@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e 
+set -e
+set -x 
 
 USER=${USER:-$(id -u -n)}
 TMPDIR=${TMPDIR:-'/tmp/'}
