@@ -156,6 +156,7 @@ install_zsh_autosuggestions(){
           update_nvim_config
           update_custom_functions -u
           clean
+          exit
           break
       fi
   done
