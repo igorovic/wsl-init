@@ -13,7 +13,6 @@ FMT_YELLOW=$(printf '\033[33m')
 FMT_BLUE=$(printf '\033[34m')
 FMT_BOLD=$(printf '\033[1m')
 FMT_RESET=$(printf '\033[0m')
-UPDATE_ONLY='no'
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
@@ -83,9 +82,10 @@ update_custom_functions(){
   clone_repo 
   funcs="$HOME/.zfunc"
   cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
-  if [[ $UPDATE_ONLY != 'no' ]]; then
+  if [[ $1 == '-u' ]]; then
     if [[ -d $funcs ]]; then
-        autoload ${=$(cd "$funcs" && echo *)}
+        typeset -TUg +x FPATH=$funcs:$FPATH
+        autoload -U ${=$(cd "$funcs" && echo *)}
     fi
   fi
 }
@@ -154,13 +154,11 @@ install_zsh_autosuggestions(){
   # Ability to run only updates
   for i in "$@" ; do
       if [[ $i == "--update" || $i == "-u" ]] ; then
-          UPDATE_ONLY='yes'
           echo "UPDATES ONLY"
           update_configs
           update_nvim_config
-          update_custom_functions
+          update_custom_functions -u
           clean
-          exit
           break
       fi
   done
