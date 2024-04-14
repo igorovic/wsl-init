@@ -169,6 +169,7 @@ install_starship(){
 }
 
 install_zoxide(){
+  # zoxide is installed in $HOME/.local/bin - make sure to set your PATH accordingly
   set -u
   local _tmp_dir
   _tmp_dir="$(mktemp -d)"
