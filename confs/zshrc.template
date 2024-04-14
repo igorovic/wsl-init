@@ -5,7 +5,7 @@ autoload -U colors && colors
 # History in cache directory:
 HISTSIZE=10000
 SAVEHIST=10000
-HISTFILE=~/.cache/zsh/history
+HISTFILE="$HOME/.cache/zsh/history"
 
 # fix tab completion remanent chars in docker
 export LC_ALL="en_US.UTF-8"
