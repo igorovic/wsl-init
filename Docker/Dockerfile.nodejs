@@ -1,6 +1,7 @@
 
 FROM dyve/ubuntu-dev-base:latest
 
+USER root
 RUN apt update \
     && apt upgrade -y 
 
