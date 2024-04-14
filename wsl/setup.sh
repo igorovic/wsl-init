@@ -177,6 +177,7 @@ install_zoxide(){
 }
 
 install_zsh_autosuggestions(){
+  PREFIX=''
   [[ ! -d "$HOME/.zsh" ]] && mkdir -p "$HOME/.zsh"
   git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.zsh/zsh-autosuggestions"
   
