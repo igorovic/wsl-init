@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+set -x
 
 USER=${USER:-$(id -u -n)}
 TMPDIR=${TMPDIR:-'/tmp/'}
@@ -76,14 +76,16 @@ update_configs(){
   # .zprofile
   wget -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
   # .ssh-config
+  mkdir -p "$HOME/.ssh"
   wget -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
   # starship.toml
+  mkdir -p "$HOME/.config"
   wget -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
 }
 
 update_custom_functions(){
   clone_repo 
-  cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/.zfunc"
+  cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
 }
 
 uninstall_ohmyzsh(){
@@ -139,11 +141,8 @@ fi
 
 uninstall_ohmyzsh
 update_configs
-#update_custom_functions
-# download_tmux_plugins
-# update_nvim_config
-# install_starship
-# clean
-# if [[ -f "/.dockerenv" ]];then
-#   sudo cat /.dockerenv
-# fi
+update_custom_functions
+download_tmux_plugins
+update_nvim_config
+install_starship
+clean
