@@ -17,6 +17,10 @@ GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
 
+command_exists(){
+    command -v "$@" >/dev/null 2>&1
+}
+
 user_can_sudo() {
 # Check if sudo is installed
 command_exists sudo || return 1
@@ -71,8 +75,6 @@ install_deps(){
   fi
 }
 
-
-
 # Utilities
 join_paths() {
   # source: https://www.baeldung.com/linux/concatenate-strings-to-build-path#a-generic-solution-that-handles-special-cases
@@ -83,24 +85,19 @@ join_paths() {
    echo $full_path
 }
 
-command_exists(){
-    command -v "$@" >/dev/null 2>&1
-}
-
-
 
 REPO_CLONE="$(mktemp -d)/wsl-init"
 clone_repo(){
   if [[ -d "$REPO_CLONE" ]]; then
     echo "remove dir $REPO_CLONE"
-    sudo rm -rf "$REPO_CLONE"
+    with_sudo rm -rf "$REPO_CLONE"
   fi
   echo "cloning repo"
   git clone --depth=1 --filter=blob:none --single-branch "$GITURL.git" $REPO_CLONE
 }
 
 clean(){
-  sudo rm -rf "$REPO_CLONE"
+  with_sudo rm -rf "$REPO_CLONE"
 }
 update_configs(){
   # .zshrc
