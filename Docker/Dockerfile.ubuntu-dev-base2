@@ -8,10 +8,10 @@ RUN wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releas
     && tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz \
     && ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim \
     && ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim \
-    && wget -O /tmp/zoxide-install.sh https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh \
-    && /bin/bash /tmp/zoxide-install.sh
+    && rm /usr/bin/nvim-linux64.tar.gz \
+    && rm -rf /root/.oh-my-zsh
 
-# create the use
+# change user's UID to match the host
 # This is important if we want to use the ssh-agent
 ARG UID=1000
 ENV SSH_AUTH_SOCK=/ssh-agent
@@ -22,5 +22,5 @@ RUN chsh -s /bin/zsh vscode
 
 USER vscode
 
-
+WORKDIR /home/vscode
 CMD [ "/bin/zsh" ]

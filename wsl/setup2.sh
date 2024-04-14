@@ -1,9 +1,7 @@
 #!/bin/bash
-set -e
 set -x
 
 USER=${USER:-$(id -u -n)}
-TMPDIR=${TMPDIR:-'/tmp/'}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
 # macOS does not have getent, but this works even if $HOME is unset
 HOME="${HOME:-$(eval echo ~$USER)}"
@@ -15,7 +13,7 @@ FMT_YELLOW=$(printf '\033[33m')
 FMT_BLUE=$(printf '\033[34m')
 FMT_BOLD=$(printf '\033[1m')
 FMT_RESET=$(printf '\033[0m')
-
+UPDATE_ONLY='no'
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
@@ -53,7 +51,7 @@ command_exists(){
     command -v "$@" >/dev/null 2>&1
 }
 
-REPO_CLONE=$(join_paths $TMPDIR "/wsl-init")
+REPO_CLONE="$(mktemp -d)/wsl-init"
 clone_repo(){
   if [[ -d "$REPO_CLONE" ]]; then
     echo "remove dir $REPO_CLONE"
@@ -86,14 +84,12 @@ update_configs(){
 update_custom_functions(){
   clone_repo 
   cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
+  if [[ $UPDATE_ONLY != 'no' ]]; then
+    load_zfuncs
+  fi
 }
 
 uninstall_ohmyzsh(){
-  # uninstall_script="$HOME/.oh-my-zsh/tools/uninstall.sh"
-  # if [[ -f $uninstall_script ]]; then
-  #   #command "$(echo $0)" $uninstall_script
-  #   /bin/bash "$uninstall_script" | yes y
-  # fi
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
     rm -rf "$HOME/.oh-my-zsh" 
   fi
@@ -111,6 +107,12 @@ download_tmux_plugins(){
   CONFIGDIR="$HOME/.config"
   [ -d $CONFIGDIR ] || mkdir -p $CONFIGDIR
   git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm > /dev/null
+  local _install_script="$HOME/.tmux/plugins/tpm/bin/install_plugins"
+  if [[ -f $_install_script ]]; then
+    /bin/bash $_install_script
+  else
+    printf '%s tmux plufin filed missing install_script %s\n' $FMT_RED $FMT_RESET
+  fi
 }
 
 update_nvim_config(){
@@ -122,27 +124,57 @@ update_nvim_config(){
 }
 
 install_starship(){
-  wget -O /tmp/starship-install.sh https://starship.rs/install.sh && /usr/bin/sh /tmp/starship-install.sh --yes 
-  rm /tmp/starship-install.sh
+  set -u
+  local _tmp_dir
+  _tmp_dir="$(mktemp -d)"
+  wget -O "$_tmp_dir/starship-install.sh" https://starship.rs/install.sh
+  /usr/bin/sh "$_tmp_dir/starship-install.sh" --yes 
+  rm "$_tmp_dir/starship-install.sh"
 }
 
-install_deps
-continue_as_root='N'
-if [[ "root" == "$(id -u -n)" ]]; then
-  printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
-  printf 'This will install customizations for root user!\n'
-  printf "Continue as 'root'? [y/N]"
-  continue_as_root=$(read -e)
-  if [[ $continue_as_root != 'y' || $continue_as_root != 'Y' ]]; then
-    exit
-  fi
-  echo "continue"
-fi
+install_zoxide(){
+  set -u
+  local _tmp_dir
+  _tmp_dir="$(mktemp -d)"
+  wget -O "$_tmp_dir/zoxide-install.sh" https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh 
+  /bin/bash "$_tmp_dir/zoxide-install.sh"
+}
 
-uninstall_ohmyzsh
-update_configs
-update_custom_functions
-download_tmux_plugins
-update_nvim_config
-install_starship
-clean
+# Ability to run only updates
+for i in "$@" ; do
+    if [[ $i == "--update" || $i == "-u" ]] ; then
+        UPDATE_ONLY='yes'
+        echo "UPDATES ONLY"
+        update_configs
+        update_nvim_config
+        update_custom_functions
+        exit
+        break
+    fi
+done
+
+# This is put in braces to ensure that the script does not run until it is
+# downloaded completely.
+{
+  install_deps
+  continue_as_root='N'
+  if [[ "root" == "$(id -u -n)" ]]; then
+    printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
+    printf 'This will install customizations for root user!\n'
+    printf "Continue as 'root'? [y/N]"
+    continue_as_root=$(read -e)
+    if [[ $continue_as_root != 'y' || $continue_as_root != 'Y' ]]; then
+      exit
+    fi
+    echo "continue"
+  fi
+
+  uninstall_ohmyzsh
+  update_configs
+  update_custom_functions
+  download_tmux_plugins
+  update_nvim_config
+  install_starship
+  install_zoxide
+  clean
+}
