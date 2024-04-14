@@ -8,6 +8,8 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 install_node(){
     if ! check_cmd nvm; then
         /usr/bin/bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash"
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
     fi
     if ! check_cmd node; then
         nvm install --lts 
@@ -22,4 +24,4 @@ install_node
 # reset pnpm global store in container - to avoid conflicts with the host's store
 # need sed since sometime it returns the value 'undefined'
 # pnpm config --global set store-dir "${$(pnpm store path | sed 's/undefined//p' ):-$HOME/.pnpm-store}"
-pnpm config --global set store-dire "$HOME/.pnpm-store"
+#pnpm config --global set store-dire "$HOME/.pnpm-store"
