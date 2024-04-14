@@ -1,3 +1,12 @@
+## Install script
+
+You can use the install script in container or WSL
+
+```bash
+curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
+```
+
+
 ## WSL setup 
 
 Download the desired tarball here `https://cloud-images.ubuntu.com/wsl/` 

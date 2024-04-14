@@ -22,5 +22,5 @@ RUN chsh -s /bin/zsh vscode
 
 USER vscode
 WORKDIR /home/vscode
-RUN curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup2.sh | /bin/bash
+RUN curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
 CMD [ "/bin/zsh" ]

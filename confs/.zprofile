@@ -9,6 +9,10 @@ eval "$(zoxide init --cmd cd zsh)"
 git config --global user.email "$GIT_USER_EMAIL"
 git config --global user.name "$GIT_USER_NAME"
 
+if [[ -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
+    source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
 # function found online
 () {
     # add our local functions dir to the fpath
