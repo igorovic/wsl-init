@@ -6,6 +6,12 @@ You can use the install script in container or WSL
 curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
 ```
 
+**run only updates**
+
+```bash
+curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash -s -- -u
+```
+
 
 ## WSL setup 
 
@@ -42,6 +48,18 @@ docker run -it --name ubuntu-dev -p 3000-3020:3000-3020 \
 dyve/ubuntu-dev-base:latest
 # if container already exists 
 docker start -ia ubuntu-dev
+```
+
+**nodejs dev**
+
+```bash
+docker run -it --name node-dev -p 3000-3020:3000-3020 \
+--mount type=bind,source=./,target=/home/vscode/dev \
+--mount type=bind,source="$(pnpm store path)",target=/home/vscode/.pnpm-store \
+-e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
+-e GIT_USER_EMAIL="$(git config user.email)" \
+-e GIT_USER_NAME="$(git config user.name)" \
+dyve/ubuntu-dev-base:nodejs
 ```
  
 ## Tmux
