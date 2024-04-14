@@ -16,23 +16,62 @@ FMT_RESET=$(printf '\033[0m')
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 
+
+user_can_sudo() {
+# Check if sudo is installed
+command_exists sudo || return 1
+# Termux can't run sudo, so we can detect it and exit the function early.
+case "$PREFIX" in
+*com.termux*) return 1 ;;
+esac
+# The following command has 3 parts:
+#
+# 1. Run `sudo` with `-v`. Does the following:
+#    • with privilege: asks for a password immediately.
+#    • without privilege: exits with error code 1 and prints the message:
+#      Sorry, user <username> may not run sudo on <hostname>
+#
+# 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
+#    password is not required, the command will finish with exit code 0.
+#    If one is required, sudo will exit with error code 1 and print the
+#    message:
+#    sudo: a password is required
+#
+# 3. Check for the words "may not run sudo" in the output to really tell
+#    whether the user has privileges or not. For that we have to make sure
+#    to run `sudo` in the default locale (with `LANG=`) so that the message
+#    stays consistent regardless of the user's locale.
+#
+! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
+}
+
+with_sudo(){
+  if user_can_sudo; then
+    sudo "$@"
+  else
+    "$@"
+  fi
+}
+
 install_deps(){
   if [[ -f "/.dockerenv" ]]; then
     printf '%s App installation skipped %s\n' $FMT_RED $FMT_RESET
     printf '%s Advised to install apps during container build %s\n' $FMT_RED $FMT_RESET
   else
-    sudo apt-get update 
-    sudo apt-get upgrade
-    sudo apt-get install -y software-properties-common gcc make 
-    sudo apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
+    with_sudo apt-get update 
+    with_sudo apt-get upgrade
+    with_sudo apt-get install -y software-properties-common gcc make 
+    with_sudo apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
     # for more recent version of neovim
-    sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
-    sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
-    sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
-    sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
-    sudo rm /usr/bin/nvim-linux64.tar.gz
+    with_sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
+    with_sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
+    with_sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+    with_sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+    with_sudo rm /usr/bin/nvim-linux64.tar.gz
   fi
 }
+
+
 
 # Utilities
 join_paths() {
@@ -47,6 +86,8 @@ join_paths() {
 command_exists(){
     command -v "$@" >/dev/null 2>&1
 }
+
+
 
 REPO_CLONE="$(mktemp -d)/wsl-init"
 clone_repo(){

@@ -31,6 +31,13 @@ install_node(){
     else
         pnpm_config
     fi
+    
+    if ! grep -q 'NVM_DIR=' "$HOME/.zshenv"; then
+    tee -a "$HOME/.zshenv" > /dev/null << 'EOF'
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+EOF
+    fi
 }
 
 install_node

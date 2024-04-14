@@ -1,0 +1,11 @@
+
+[Unit]
+Description=X Vnc
+Requires=xvfb.service
+After=xvfb.service
+
+[Service]
+ExecStart=/usr/bin/x11vnc -display :0.0
+
+[Install]
+WantedBy=multi-user.target
