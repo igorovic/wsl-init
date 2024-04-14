@@ -1,0 +1,10 @@
+
+FROM dyve/ubuntu-dev-base:latest
+
+RUN apt update \
+    && apt upgrade -y 
+
+USER vscode
+WORKDIR /home/vscode
+
+CMD [ "/bin/zsh" ]

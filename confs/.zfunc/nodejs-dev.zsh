@@ -20,4 +20,5 @@ install_node(){
 
 install_node
 # reset pnpm global store in container - to avoid conflicts with the host's store
-pnpm config set store-dir "${$(pnpm config get store-dir):-$HOME/.pnpm-store}" --global
+# need sed since sometime it returns the value 'undefined'
+pnpm config --globa set store-dir "${$(pnpm config get store-dir | sed 's/undefined//p' ):-$HOME/.pnpm-store}"
