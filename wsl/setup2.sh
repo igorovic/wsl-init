@@ -31,9 +31,7 @@ install_deps(){
     sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
     sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
     sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
-    # MUST install from source for last version
-    #sudo wget -O /tmp/zoxide-install.sh https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
-    #sudo /bin/bash /tmp/zoxide-install.sh
+    sudo rm /usr/bin/nvim-linux64.tar.gz
   fi
 }
 
@@ -83,9 +81,12 @@ update_configs(){
 
 update_custom_functions(){
   clone_repo 
+  funcs="$HOME/.zfunc"
   cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
   if [[ $UPDATE_ONLY != 'no' ]]; then
-    load_zfuncs
+    if [[ -d $funcs ]]; then
+        autoload ${=$(cd "$funcs" && echo *)}
+    fi
   fi
 }
 
@@ -148,6 +149,7 @@ for i in "$@" ; do
         update_configs
         update_nvim_config
         update_custom_functions
+        clean
         exit
         break
     fi
