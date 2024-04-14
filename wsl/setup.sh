@@ -83,10 +83,7 @@ update_custom_functions(){
   funcs="$HOME/.zfunc"
   cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
   if [[ $1 == '-u' ]]; then
-    if [[ -d $funcs ]]; then
-        typeset -TUg +x FPATH=$funcs:$FPATH
-        autoload -U "${=$(cd "$funcs" && echo *)}"
-    fi
+    printf '%s You should freload your functions %s\n' $FMT_YELLOW $FMT_RESET
   fi
 }
 
