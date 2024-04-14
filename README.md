@@ -55,7 +55,7 @@ docker start -ia ubuntu-dev
 ```bash
 docker run -it --name node-dev -p 3000-3020:3000-3020 \
 --mount type=bind,source=./,target=/home/vscode/dev \
---mount type=bind,source="$(pnpm store path)",target=/home/vscode/.pnpm-store \
+--mount type=bind,source="$(pnpm store path)",target=/home/vscode/.pnpm-store/v3 \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \

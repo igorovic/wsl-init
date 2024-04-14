@@ -3,7 +3,7 @@ check_cmd() {
     command -v "$1" >/dev/null 2>&1
 }
 
-PNPM_STORE="$HOME/.pnpm-store" 
+PNPM_STORE="$HOME/.pnpm-store/v3"
 
 nvm_config(){
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"

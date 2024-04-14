@@ -147,23 +147,24 @@ install_zsh_autosuggestions(){
   
 }
 
-# Ability to run only updates
-for i in "$@" ; do
-    if [[ $i == "--update" || $i == "-u" ]] ; then
-        UPDATE_ONLY='yes'
-        echo "UPDATES ONLY"
-        update_configs
-        update_nvim_config
-        update_custom_functions
-        clean
-        exit
-        break
-    fi
-done
 
 # This is put in braces to ensure that the script does not run until it is
 # downloaded completely.
 {
+  # Ability to run only updates
+  for i in "$@" ; do
+      if [[ $i == "--update" || $i == "-u" ]] ; then
+          UPDATE_ONLY='yes'
+          echo "UPDATES ONLY"
+          update_configs
+          update_nvim_config
+          update_custom_functions
+          clean
+          exit
+          break
+      fi
+  done
+
   install_deps
   continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
