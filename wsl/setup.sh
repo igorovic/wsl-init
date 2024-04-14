@@ -85,7 +85,7 @@ update_custom_functions(){
   if [[ $1 == '-u' ]]; then
     if [[ -d $funcs ]]; then
         typeset -TUg +x FPATH=$funcs:$FPATH
-        autoload -U ${=$(cd "$funcs" && echo *)}
+        autoload -U "${=$(cd "$funcs" && echo *)}"
     fi
   fi
 }
