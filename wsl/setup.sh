@@ -49,29 +49,47 @@ esac
 ! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
 }
 
-with_sudo(){
+function with_sudo(){
   if user_can_sudo; then
-    sudo "$@"
+    # save the first argument
+    local f=$1
+    # check if first arg is a shell function
+    if [[ $(type -t "$f") == 'function' ]]; then
+      FUNC=$(declare -f $1)
+      # shift to keep remaining args since first arg is the function/command to execute
+      shift
+      sudo bash -c "$FUNC; $f $@"
+    else
+      sudo $@
+    fi
   else
-    "$@"
+    $@
   fi
 }
+
+# with_sudo(){
+#   if user_can_sudo; then
+#     sudo "$@"
+#   else
+#     "$@"
+#   fi
+# }
 
 install_deps(){
   if [[ -f "/.dockerenv" ]]; then
     printf '%s App installation skipped %s\n' $FMT_RED $FMT_RESET
     printf '%s Advised to install apps during container build %s\n' $FMT_RED $FMT_RESET
   else
-    with_sudo apt-get update 
-    with_sudo apt-get upgrade
-    with_sudo apt-get install -y software-properties-common gcc make 
-    with_sudo apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
+    apt-get update 
+    apt-get upgrade
+    apt-get install -y software-properties-common gcc make 
+    apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
     # for more recent version of neovim
-    with_sudo wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
-    with_sudo tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
-    with_sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
-    with_sudo ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
-    with_sudo rm /usr/bin/nvim-linux64.tar.gz
+    wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
+    tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
+    ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/bin/nvim
+    ln -fs /usr/bin/nvim-linux64/bin/nvim /usr/local/bin/nvim
+    rm /usr/bin/nvim-linux64.tar.gz
   fi
 }
 
@@ -201,7 +219,7 @@ install_zsh_autosuggestions(){
       fi
   done
 
-  install_deps
+  with_sudo install_deps
   continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
     printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
