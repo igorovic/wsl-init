@@ -18,35 +18,35 @@ GITURL="https://github.com/$REPO"
 
 
 command_exists(){
-    command -v "$@" >/dev/null 2>&1
+  command -v "$@" >/dev/null 2>&1
 }
 
 user_can_sudo() {
-# Check if sudo is installed
-command_exists sudo || return 1
-# Termux can't run sudo, so we can detect it and exit the function early.
-case "$PREFIX" in
-*com.termux*) return 1 ;;
-esac
-# The following command has 3 parts:
-#
-# 1. Run `sudo` with `-v`. Does the following:
-#    • with privilege: asks for a password immediately.
-#    • without privilege: exits with error code 1 and prints the message:
-#      Sorry, user <username> may not run sudo on <hostname>
-#
-# 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
-#    password is not required, the command will finish with exit code 0.
-#    If one is required, sudo will exit with error code 1 and print the
-#    message:
-#    sudo: a password is required
-#
-# 3. Check for the words "may not run sudo" in the output to really tell
-#    whether the user has privileges or not. For that we have to make sure
-#    to run `sudo` in the default locale (with `LANG=`) so that the message
-#    stays consistent regardless of the user's locale.
-#
-! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
+  # Check if sudo is installed
+  command_exists sudo || return 1
+  # Termux can't run sudo, so we can detect it and exit the function early.
+  case "$PREFIX" in
+  *com.termux*) return 1 ;;
+  esac
+  # The following command has 3 parts:
+  #
+  # 1. Run `sudo` with `-v`. Does the following:
+  #    • with privilege: asks for a password immediately.
+  #    • without privilege: exits with error code 1 and prints the message:
+  #      Sorry, user <username> may not run sudo on <hostname>
+  #
+  # 2. Pass `-n` to `sudo` to tell it to not ask for a password. If the
+  #    password is not required, the command will finish with exit code 0.
+  #    If one is required, sudo will exit with error code 1 and print the
+  #    message:
+  #    sudo: a password is required
+  #
+  # 3. Check for the words "may not run sudo" in the output to really tell
+  #    whether the user has privileges or not. For that we have to make sure
+  #    to run `sudo` in the default locale (with `LANG=`) so that the message
+  #    stays consistent regardless of the user's locale.
+  #
+  ! LANG= sudo -n -v 2>&1 | grep -q "may not run sudo"
 }
 
 function with_sudo(){
@@ -67,13 +67,9 @@ function with_sudo(){
   fi
 }
 
-# with_sudo(){
-#   if user_can_sudo; then
-#     sudo "$@"
-#   else
-#     "$@"
-#   fi
-# }
+function enable_nopass_sudo(){
+  echo "$USER     ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER
+}
 
 install_deps(){
   if [[ -f "/.dockerenv" ]]; then
@@ -154,7 +150,7 @@ setup_wsl(){
   wget -N -O "/etc/wsl.con" "$GITRAWURL/main/confs/wsl.conf"
   chmod 0764 /etc/wsl.conf
   chown root:root /etc/wsl.conf
-  sed -i "s/{{user}}/$user/g" /etc/wsl.conf
+  sed -i "s/{{user}}/$USER/g" /etc/wsl.conf
 }
 
 download_tmux_plugins(){
@@ -182,7 +178,7 @@ install_starship(){
   local _tmp_dir
   _tmp_dir="$(mktemp -d)"
   wget -O "$_tmp_dir/starship-install.sh" https://starship.rs/install.sh
-  /usr/bin/sh "$_tmp_dir/starship-install.sh" --yes 
+  with_sudo /usr/bin/sh "$_tmp_dir/starship-install.sh" --yes 
   rm "$_tmp_dir/starship-install.sh"
 }
 
