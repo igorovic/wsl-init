@@ -11,15 +11,26 @@ Example:
 fi
 
 
-GITCMD=$1
+local GITCMD=$1
 echo $2 | sed -nr 's%.*(gitlab.com|github.com)/(.*)/(.*)$%\1 \2 \3%gp' | read -A PARTS
 
 
-PROVIDER=$PARTS[1] 
-GITUSER=$PARTS[2]
-REPO=$PARTS[3]
+local PROVIDER=$PARTS[1] 
+local GITUSER=$PARTS[2]
+local REPO=$PARTS[3]
+local GITUSERNAME="${GIT_USERNAME:-$(git config --global user.username)}"
+GITUSERNAME=${GITUSERNAME:-$GITUSER}
+
+if [[ -z "$GITUSERNAME" ]]; then
+  echo "Git Username is undefined"
+  return
+else
+  echo "Git Username: $GITUSERNAME"
+fi
 
 
-AUTH="igorovic:$(pass show $PROVIDER/$GITUSER)"
+local PASSWORD=${$(pass "$PROVIDER/$GITUSERNAME" 2>/dev/null):-$(pass "$PROVIDER/$GITUSER" 2>/dev/null)}
+
+local AUTH="$GITUSERNAME:$PASSWORD"
 
 eval "git $GITCMD https://$AUTH@$PROVIDER/$GITUSER/$REPO"

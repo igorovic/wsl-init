@@ -21,6 +21,8 @@ fi
 
 git config --global user.email "$GIT_USER_EMAIL"
 git config --global user.name "$GIT_USER_NAME"
+git config --global user.username "$GIT_USERNAME"
+
 
 if [[ -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
     source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
