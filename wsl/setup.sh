@@ -79,7 +79,7 @@ install_deps(){
     apt-get update 
     apt-get upgrade
     apt-get install -y software-properties-common gcc make 
-    apt-get install -y jq git unzip tmux zsh exa ripgrep fzf wget pass
+    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget pass
     # for more recent version of neovim
     wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
     tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -198,6 +198,16 @@ install_zsh_autosuggestions(){
   
 }
 
+install_eza(){
+  # requires sudo
+  # https://github.com/eza-community/eza
+  mkdir -p /etc/apt/keyrings
+  wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | tee /etc/apt/sources.list.d/gierens.list
+  chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+  apt update
+  apt install -y eza
+}
 
 # This is put in braces to ensure that the script does not run until it is
 # downloaded completely.
@@ -236,5 +246,6 @@ install_zsh_autosuggestions(){
   install_starship
   install_zoxide
   install_zsh_autosuggestions
+  install_eza
   clean
 }

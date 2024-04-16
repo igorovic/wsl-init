@@ -1,4 +1,5 @@
 alias grep="rg"
+alias ls="eza"
 alias ll="ls -lha"
 alias tmux="tmux -2u"
 alias vim="nvim"
