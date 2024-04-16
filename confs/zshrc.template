@@ -7,8 +7,10 @@ HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE="$HOME/.cache/zsh/history"
 
-# fix tab completion remanent chars in docker
-export LC_ALL="en_US.UTF-8"
+# fix tab completion remanent chars in docker -- and avoid overriding in WSL
+if [[ -z "$LC_ALL" && -z "$LANG" ]]; then
+  export LC_ALL="C.UTF-8"
+fi
 
 # Basic auto/tab complete:
 autoload -U compinit
