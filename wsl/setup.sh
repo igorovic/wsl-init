@@ -157,7 +157,7 @@ setup_wsl(){
 download_tmux_plugins(){
   CONFIGDIR="$HOME/.config"
   [ -d $CONFIGDIR ] || mkdir -p $CONFIGDIR
-  git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm > /dev/null
+  git clone --depth=1 --filter=blob:none https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm > /dev/null 2>/dev/null
   local _install_script="$HOME/.tmux/plugins/tpm/bin/install_plugins"
   if [[ -f $_install_script ]]; then
     /bin/bash $_install_script
