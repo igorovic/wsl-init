@@ -1,6 +1,5 @@
 #!/bin/bash
 set -x
-set -e
 
 USER=${USER:-$(id -u -n)}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
@@ -244,6 +243,7 @@ install_eza(){
   update_custom_functions
   download_tmux_plugins
   update_nvim_config
+  set -e
   install_starship
   install_zoxide
   install_zsh_autosuggestions
