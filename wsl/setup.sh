@@ -245,10 +245,9 @@ install_eza(){
   update_custom_functions
   download_tmux_plugins
   update_nvim_config
-  set -e
   install_starship
   install_zoxide
   install_zsh_autosuggestions
-  install_eza
+  with_sudo install_eza
   clean
 }
