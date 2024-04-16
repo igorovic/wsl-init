@@ -16,8 +16,8 @@ setopt hist_save_no_dups      # Do not write a duplicate event to the history fi
 setopt hist_verify            # Do not execute immediately upon history expansion.
 setopt inc_append_history     # Write to the history file immediately, not when the shell exits.
 setopt share_history          # Share history between different instances of the shell.
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=1000
+export SAVEHIST=1000
 export HISTFILE="$HOME/.cache/zsh/history"
 
 # fix tab completion remanent chars in docker -- and avoid overriding in WSL
