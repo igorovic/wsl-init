@@ -232,6 +232,12 @@ install_eza(){
   done
 
   with_sudo install_deps
+  # zsh history setup
+  mkdir -p "$HOME/.cache/zsh"
+  touch "$HOME/.cache/zsh/history"
+  chmod -R 0600 "$HOME/.cache/zsh"
+  chown -R $USER:$USER "$HOME/.cache/zsh"
+
   continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
     printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
