@@ -174,7 +174,12 @@ update_nvim_config(){
     echo "cloning repo"
     clone_repo
   fi
-  cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
+  # avoid creating a useless subdir
+  if [[ -d "$HOME/.config/nvim" ]]; then
+    cp -rf "$REPO_CLONE/nvim" "$HOME/.config"
+  else
+    cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
+  fi
 }
 
 install_starship(){
