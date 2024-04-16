@@ -147,6 +147,10 @@ uninstall_ohmyzsh(){
 
 setup_wsl(){
   # wsl.conf
+  if [[ -z $WSL_DISTRO_NAME ]]; then
+    printf '%s SKIP: Not WSL %s\n' $FMT_YELLOW $FMT_RESET
+    return
+  fi
   wget -N -O "/etc/wsl.con" "$GITRAWURL/main/confs/wsl.conf"
   chmod 0764 /etc/wsl.conf
   chown root:root /etc/wsl.conf
@@ -249,5 +253,6 @@ install_eza(){
   install_zoxide
   install_zsh_autosuggestions
   with_sudo install_eza
+  with_sudo setup_wsl
   clean
 }

@@ -16,7 +16,7 @@ eval "$(starship init zsh)"
 if $(command -v zoxide > /dev/null 2>&1); then 
     eval "$(zoxide init --cmd cd zsh)"
 else
-    eval "$(zoxide init zsh)"
+   echo 'zoxide is not installed' 
 fi
 
 git config --global user.email "$GIT_USER_EMAIL"
