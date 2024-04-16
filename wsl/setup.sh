@@ -175,6 +175,8 @@ update_nvim_config(){
 
 install_starship(){
   set -u
+  # set PREFIX to avoid bug in install-script
+  PREFIX=''
   local _tmp_dir
   _tmp_dir="$(mktemp -d)"
   wget -O "$_tmp_dir/starship-install.sh" https://starship.rs/install.sh
