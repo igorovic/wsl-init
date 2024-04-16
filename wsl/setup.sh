@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x
+set -e
 
 USER=${USER:-$(id -u -n)}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
