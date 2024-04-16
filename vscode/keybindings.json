@@ -45,9 +45,15 @@
         "when": "filesExplorerFocus && !inputFocus"
     },
     {
-        // to close a terminal simply ctrl+D
+        // to terminate a terminal simply ctrl+D
         "key": "ctrl+shift+D",
         "command": "workbench.action.terminal.new",
+        "when": "terminalFocus"
+    },
+    {
+        // hide terminal panel on Windows
+        "key": "ctrl+X",
+        "command": "workbench.action.togglePanel",
         "when": "terminalFocus"
     }
 ]
