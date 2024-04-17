@@ -5,7 +5,7 @@
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindings": [
     {
-      "before": ["<C-j>"],
+      "before": ["<C-h>"],
       "commands": ["workbench.action.focusLeftGroup"],
       "silent": true
     },
@@ -15,12 +15,12 @@
       "silent": true
     },
     {
-      "before": ["<C-i>"],
+      "before": ["<C-k>"],
       "commands": ["workbench.action.focusAboveGroup"],
       "silent": true
     },
     {
-      "before": ["<C-k>"],
+      "before": ["<C-j>"],
       "commands": ["workbench.action.focusBelowGroup"],
       "silent": true
     }

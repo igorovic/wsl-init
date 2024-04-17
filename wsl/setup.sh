@@ -228,16 +228,18 @@ install_eza(){
 # downloaded completely.
 {
   # Ability to run only updates
-  for i in "$@" ; do
-      if [[ $i == "--update" || $i == "-u" ]] ; then
-          echo "UPDATES ONLY"
+  while getopts ":uU-" opt; do
+    case $opt in
+      u|U|update|Update)
+        echo "UPDATES ONLY"
           update_configs
           update_nvim_config
           update_custom_functions -u
           clean
           exit
           break
-      fi
+      ;;
+    esac
   done
 
   with_sudo install_deps

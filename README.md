@@ -34,6 +34,8 @@ In your WSL git clone this repo and execute the initial script.
 ```bash
 # UID is necessary to grant access to ssh-agent socket
 docker build -t dyve/ubuntu-dev-base:latest --progress plain --build-arg "UID=${UID}" --file ./Docker/Dockerfile.ubuntu-dev-base .
+# Build for nodejs with pnpm store from host
+docker build -t dyve/nodejs-dev:latest --progress plain --file ./Docker/node-pnpm.Dockerfile . 
 ```
 
 ### Start container 
@@ -53,13 +55,13 @@ docker start -ia ubuntu-dev
 **nodejs dev**
 
 ```bash
-docker run -it --name node-dev -p 3000-3020:3000-3020 \
+docker run -it --name node-dev2 -p 3000-3020:3000-3020 \
 --mount type=bind,source=./,target=/home/vscode/dev \
---mount type=bind,source="$(pnpm store path)",target=/home/vscode/.pnpm-store/v3 \
+#--mount type=bind,source="$(pnpm store path)",target=/home/vscode/.pnpm-store/v3 \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \
-dyve/ubuntu-dev-base:nodejs
+dyve/nodejs-dev:latest
 ```
 
 **tauri dev**

@@ -3,7 +3,7 @@ check_cmd() {
     command -v "$1" >/dev/null 2>&1
 }
 
-PNPM_STORE="$HOME/.pnpm-store/v3"
+export PNPM_STORE="$HOME/.pnpm-store/v3"
 
 nvm_config(){
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -33,14 +33,17 @@ install_node(){
     fi
     
     if ! grep -q 'NVM_DIR=' "$HOME/.zshenv"; then
-    tee -a "$HOME/.zshenv" > /dev/null << 'EOF'
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+    tee -a "$HOME/.zshenv" > /dev/null <<- 'EOF'
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 EOF
     fi
 }
 
 install_node
+
+echo 'export PNPM_STORE="$HOME/.pnpm-store/v3"' >> "$HOME/.zshenv"
+
 # reset pnpm global store in container - to avoid conflicts with the host's store
 # need sed since sometime it returns the value 'undefined'
 # pnpm config --global set store-dir "${$(pnpm store path | sed 's/undefined//p' ):-$HOME/.pnpm-store}"
