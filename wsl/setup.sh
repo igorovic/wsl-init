@@ -228,9 +228,9 @@ install_eza(){
 # downloaded completely.
 {
   # Ability to run only updates
-  while getopts ":uU-" opt; do
+  while getopts "uf" opt; do
     case $opt in
-      u|U|update|Update)
+      u)
         echo "UPDATES ONLY"
           update_configs
           update_nvim_config
@@ -238,6 +238,15 @@ install_eza(){
           clean
           exit
           break
+      ;;
+      f)
+        echo "Update custom functions"
+        update_custom_functions -u
+        clean
+        exit
+        break
+      ;;
+      ?)
       ;;
     esac
   done
