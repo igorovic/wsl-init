@@ -1,96 +1,106 @@
 // Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "ctrl+0",
-        "command": "terminal.focus",
-        "when": "!terminalFocus"
-    },
-    {
-        "key": "ctrl+0",
-        "command": "workbench.action.lastEditorInGroup",
-        "when": "terminalFocus"
-    },
-    {
-        "key": "ctrl+0",
-        "command": "-workbench.action.lastEditorInGroup"
-    },
-    {
-        "key": "ctrl+[BracketRight]",
-        "command": "workbench.files.action.focusFilesExplorer",
-        "when": "!filesExplorerFocus"
-    },
-    {
-        "key": "ctrl+[BracketRight]",
-        "command": "workbench.action.lastEditorInGroup",
-        "when": "filesExplorerFocus"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "workbench.action.terminal.focusNext",
-        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "workbench.action.terminal.focus",
-        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
-    },
-    {
-        "key": "a",
-        "command": "explorer.newFile",
-        "when": "filesExplorerFocus && !inputFocus"
-    },
-    {
-        "key": "d",
-        "command": "explorer.newFolder",
-        "when": "filesExplorerFocus && !inputFocus"
-    },
-    {
-        // to terminate a terminal simply ctrl+D
-        "key": "ctrl+shift+D",
-        "command": "workbench.action.terminal.new",
-        "when": "terminalFocus"
-    },
-    {
-        // hide terminal panel on Windows
-        "key": "ctrl+X",
-        "command": "workbench.action.togglePanel",
-        "when": "terminalFocus"
-    },
-    {
-        "key": "ctrl+H",
-        "command": "workbench.action.focusLeftGroup",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-      },
-      {
-        "key": "ctrl+l",
-        "command": "workbench.action.focusRightGroup",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-      },
-      {
-        "key": "ctrl+j",
-        "command": "workbench.action.focusBelowGroup",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-      },
-      {
-        "key": "ctrl+k",
-        "command": "workbench.action.focusAboveGroup",
-        "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
-      },
-      // Navigate editor tabs like vim 
-      {
-        "key": "ctrl+shift+l",
-        "command": "workbench.action.nextEditor"
-      },
-      {
-        "key": "alt+cmd+right",
-        "command": "-workbench.action.nextEditor"
-      },
-      {
-        "key": "ctrl+shift+h",
-        "command": "workbench.action.previousEditor"
-      },
-      {
-        "key": "ctrl+alt+cmd+8",
-        "command": "-workbench.action.previousEditor"
-      }
+  {
+    "key": "ctrl+0",
+    "command": "terminal.focus",
+    "when": "!terminalFocus"
+  },
+  {
+    "key": "ctrl+0",
+    "command": "workbench.action.lastEditorInGroup",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+0",
+    "command": "-workbench.action.lastEditorInGroup"
+  },
+  {
+    "key": "ctrl+[BracketRight]",
+    "command": "workbench.files.action.focusFilesExplorer",
+    "when": "!filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+[BracketRight]",
+    "command": "workbench.action.lastEditorInGroup",
+    "when": "filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.terminal.focusNext",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.terminal.focus",
+    "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+  },
+  {
+    "key": "a",
+    "command": "explorer.newFile",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "d",
+    "command": "explorer.newFolder",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    // to terminate a terminal simply ctrl+D
+    "key": "ctrl+shift+D",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalFocus"
+  },
+  {
+    // hide terminal panel on Windows
+    "key": "ctrl+X",
+    "command": "workbench.action.togglePanel",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+H",
+    "command": "workbench.action.focusLeftGroup",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.focusRightGroup",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.focusBelowGroup",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.focusAboveGroup",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  // Navigate editor tabs with vim motions like
+  {
+    "key": "ctrl+shift+l",
+    "command": "workbench.action.nextEditor"
+  },
+  {
+    "key": "alt+cmd+right",
+    "command": "-workbench.action.nextEditor"
+  },
+  {
+    "key": "ctrl+shift+h",
+    "command": "workbench.action.previousEditor"
+  },
+  {
+    "key": "ctrl+alt+cmd+8",
+    "command": "-workbench.action.previousEditor"
+  },
+  {
+    "key": "space shift+H",
+    "command": "workbench.action.splitEditorLeft",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "space shift+L",
+    "command": "workbench.action.splitEditorRight",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  }
 ]
