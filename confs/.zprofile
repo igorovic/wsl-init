@@ -19,9 +19,17 @@ else
    echo 'zoxide is not installed' 
 fi
 
-git config --global user.email "$GIT_USER_EMAIL"
-git config --global user.name "$GIT_USER_NAME"
-git config --global user.username "$GIT_USERNAME"
+# do not override with empty values
+if [[ ! -z "$GIT_USER_EMAIL" && -z "$(git config user.email)" ]]; then
+    git config --global user.email "$GIT_USER_EMAIL"
+fi
+if [[ ! -z "$GIT_USER_NAME" && -z "$(git config user.name)" ]]; then
+    git config --global user.name "$GIT_USER_NAME"
+fi
+if [[ ! -z "$GIT_USERNAME" && -z "$(git config user.namename)" ]]; then
+    # user.username is maybe not a standard git config option - however we can use it for gitpass custom zfunction
+    git config --global user.username "$GIT_USERNAME"
+fi
 
 
 if [[ -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
