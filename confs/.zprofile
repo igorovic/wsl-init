@@ -34,6 +34,7 @@ fi
 
 if [[ -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
     source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    bindkey '^ ' autosuggest-accept
 fi
 
 # function found online
