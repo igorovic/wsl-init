@@ -15,7 +15,7 @@ FMT_BOLD=$(printf '\033[1m')
 FMT_RESET=$(printf '\033[0m')
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
-
+GITHUB_USERNAME="igorovic"
 
 command_exists(){
   command -v "$@" >/dev/null 2>&1
@@ -89,6 +89,11 @@ install_zsh59(){
   /bin/sh -c ./configure && make && with_sudo make install
 
 }
+
+install_chezmoi(){
+  sh -c "$(curl -fsLS get.chezmoi.io)"
+}
+
 install_deps(){
   if [[ -f "/.dockerenv" ]]; then
     printf '%s App installation skipped %s\n' $FMT_RED $FMT_RESET
@@ -242,6 +247,11 @@ install_eza(){
   fi
 }
 
+install_dotfiles(){
+  cd $HOME
+  chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
+}
+
 customize(){
   download_tmux_plugins
   update_nvim_config
@@ -289,6 +299,7 @@ customize(){
   with_sudo install_eza
   with_sudo setup_wsl
   install_zsh59
+  install_chezmoi
   
   local continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then

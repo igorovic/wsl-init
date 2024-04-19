@@ -1,5 +1,9 @@
 Host gitlab.com
    ForwardAgent yes
+   IdentityFile ~/.ssh/gitlab
+   IdentitiesOnly yes
 
 Host github.com
    ForwardAgent yes
+   IdentityFile ~/.ssh/github
+   IdentitiesOnly yes
