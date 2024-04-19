@@ -31,3 +31,6 @@ opt.clipboard:append("unnamedplus") -- use system clipboard os default register
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
+
+-- set default colorscheme when started without plugins --noplugin option
+vim.cmd 'colorscheme slate'

@@ -1,8 +1,0 @@
----
-- name: Ubuntu developper setup
-  hosts: localhost
-  connection: localhost
-  gather_facts: false
-  tasks:
-    - name: Install tmux
-      ansible.builtin.import_tasks: ./tasks/tmux-plugin-manager.ansible.yaml
