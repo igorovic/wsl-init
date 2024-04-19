@@ -106,7 +106,7 @@ install_deps(){
     apt-get update -y
     apt-get upgrade -y
     apt-get install -y software-properties-common gcc make 
-    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget
+    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget gnupg2
     # for more recent version of neovim
     wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
     tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -251,6 +251,17 @@ install_eza(){
   fi
 }
 
+install_eget(){
+  curl https://zyedidia.github.io/eget.sh | sh
+  mv ./eget /usr/local/bin/eget
+}
+
+install_gitcredential_gopass(){
+  eget -a .deb gopasspw/git-credential-gopass
+  with_sudo dpkg -i git-credential-gopass*.deb
+  # check if installed `git help -a | grep credential-`
+}
+
 apply_chezmoi(){
   cd $HOME
   chezmoi init --apply "$DOTFILES_REPO" 
@@ -279,6 +290,7 @@ install_binaries(){
   with_sudo install_eza
   with_sudo setup_wsl
   install_zsh59
+  with_sudo install_eget
 }
 
 show_outro(){
@@ -314,6 +326,9 @@ show_outro(){
 
   if [[ "$UPDATEONLY" = false ]]; then
     install_binaries
+  else
+    chezmoi update -v
+    exit
   fi
 
   continue_as_root='N'
@@ -336,6 +351,4 @@ show_outro(){
   else
     customize
   fi
-
-  #clean
 }

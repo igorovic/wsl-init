@@ -153,10 +153,6 @@ gpg -k
 pass init <your gpg id - output by gpg -k>
 ```
 
-## TODO
-
-- [] Look into a dotfiles manager like: [chezmoi](https://www.chezmoi.io/user-guide/include-files-from-elsewhere/)
-
 ## Misc Notes
 
 ### Ansible linter
