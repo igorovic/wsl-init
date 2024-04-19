@@ -71,13 +71,31 @@ function enable_nopass_sudo(){
   echo "$USER     ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USER
 }
 
+install_zsh59(){
+  # verify if we need to install latest
+  if command_exists zsh; then
+    if [[ $(zsh --version | sed -n 's/.*\(5.9\).*/\1/p') == '5.9' ]]; then
+      # already the desired version
+      return
+    fi
+  fi
+  local tmp="$(mktemp -d)"
+  wget -O "$tmp/zsh-5.9.tar.xz" https://www.zsh.org/pub/zsh-5.9.tar.xz
+  cd "$tmp/"
+  tar xvf "$tmp/zsh-5.9.tar.xz"
+  cd zsh-5.9
+  # install required dependencies for compilation
+  with_sudo apt install -y libncurses-dev
+  /bin/sh -c ./configure && make && with_sudo make install
+
+}
 install_deps(){
   if [[ -f "/.dockerenv" ]]; then
     printf '%s App installation skipped %s\n' $FMT_RED $FMT_RESET
     printf '%s Advised to install apps during container build %s\n' $FMT_RED $FMT_RESET
   else
-    apt-get update 
-    apt-get upgrade
+    apt-get update -y
+    apt-get upgrade -y
     apt-get install -y software-properties-common gcc make 
     apt-get install -y jq git unzip tmux zsh ripgrep fzf wget pass
     # for more recent version of neovim
@@ -224,7 +242,14 @@ install_eza(){
   fi
 }
 
-# This is put in braces to ensure that the script does not run until it is
+customize(){
+  download_tmux_plugins
+  update_nvim_config
+  update_custom_functions
+  install_zsh_autosuggestions
+}
+
+# The following code is in braces to ensure that the script does not run until it is
 # downloaded completely.
 {
   # Ability to run only updates
@@ -232,12 +257,12 @@ install_eza(){
     case $opt in
       u)
         echo "UPDATES ONLY"
-          update_configs
-          update_nvim_config
-          update_custom_functions -u
-          clean
-          exit
-          break
+        update_configs
+        update_nvim_config
+        update_custom_functions -u
+        clean
+        exit
+        break
       ;;
       f)
         echo "Update custom functions"
@@ -258,27 +283,32 @@ install_eza(){
   chmod -R 0600 "$HOME/.cache/zsh"
   chown -R $USER:$USER "$HOME/.cache/zsh"
 
-  continue_as_root='N'
+  uninstall_ohmyzsh
+  install_starship
+  install_zoxide
+  with_sudo install_eza
+  with_sudo setup_wsl
+  install_zsh59
+  
+  local continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
     printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
     printf 'This will install customizations for root user!\n'
-    printf "Continue as 'root'? [y/N]"
-    continue_as_root=$(read -e)
-    if [[ $continue_as_root != 'y' || $continue_as_root != 'Y' ]]; then
-      exit
-    fi
-    echo "continue"
+    read -e -p 'Continue as 'root'? [y/N]' continue_as_root
+    case $continue_as_root in
+      y|Y)
+        echo "continue customization"
+        customize
+        break;;
+      n|N)
+        break;;
+      ?|*)
+        echo 'UNKNOW OPTION'
+        break;;
+    esac
+  else
+    customize
   fi
 
-  uninstall_ohmyzsh
-  update_configs
-  update_custom_functions
-  download_tmux_plugins
-  update_nvim_config
-  install_starship
-  install_zoxide
-  install_zsh_autosuggestions
-  with_sudo install_eza
-  with_sudo setup_wsl
   clean
 }
