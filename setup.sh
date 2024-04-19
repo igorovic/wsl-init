@@ -1,5 +1,5 @@
 #!/bin/bash
-# uncomment below for debug
+# uncomment next line for debug
 #set -x
 
 USER=${USER:-$(id -u -n)}
@@ -281,10 +281,20 @@ install_binaries(){
   install_zsh59
 }
 
+show_outro(){
+  printf '\n\n -----------------------------------------\n\n'
+  echo "Create a new user or login and apply customization"
+  echo "Example Ubuntu: "
+  echo "  adduser --gecos --shell \$(which zsh) USER"
+  printf '\n\n'
+}
+
+
+
 # The following code is in braces to ensure that the script does not run until it is
 # downloaded completely.
 {
-  local UPDATEONLY=false
+  UPDATEONLY=false
   # Ability to run only updates
   while getopts "u" opt; do
     case $opt in
@@ -306,7 +316,7 @@ install_binaries(){
     install_binaries
   fi
 
-  local continue_as_root='N'
+  continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
     printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
     printf 'This will install customizations for root user!\n'
@@ -315,12 +325,13 @@ install_binaries(){
       y|Y)
         echo "continue customization"
         customize
-        break;;
+        ;;
       n|N)
-        break;;
+        show_outro
+        ;;
       ?|*)
-        echo 'UNKNOW OPTION'
-        break;;
+        show_outro
+        ;;
     esac
   else
     customize
