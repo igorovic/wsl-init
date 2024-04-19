@@ -1,5 +1,6 @@
 #!/bin/bash
-set -x
+# uncomment below for debug
+#set -x
 
 USER=${USER:-$(id -u -n)}
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
@@ -16,6 +17,9 @@ FMT_RESET=$(printf '\033[0m')
 GITRAWURL="https://raw.githubusercontent.com/$REPO"
 GITURL="https://github.com/$REPO"
 GITHUB_USERNAME="igorovic"
+DOTFILES_REPO="https://github.com/$GITHUB_USERNAME/dotfiles.git"
+
+
 
 command_exists(){
   command -v "$@" >/dev/null 2>&1
@@ -102,7 +106,7 @@ install_deps(){
     apt-get update -y
     apt-get upgrade -y
     apt-get install -y software-properties-common gcc make 
-    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget pass
+    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget
     # for more recent version of neovim
     wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
     tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -113,54 +117,54 @@ install_deps(){
 }
 
 # Utilities
-join_paths() {
-  # source: https://www.baeldung.com/linux/concatenate-strings-to-build-path#a-generic-solution-that-handles-special-cases
-   base_path=${1}
-   sub_path=${2}
-   full_path="${base_path:+$base_path/}$sub_path"
-   full_path=$(realpath ${full_path})
-   echo $full_path
-}
+# join_paths() {
+#   # source: https://www.baeldung.com/linux/concatenate-strings-to-build-path#a-generic-solution-that-handles-special-cases
+#    base_path=${1}
+#    sub_path=${2}
+#    full_path="${base_path:+$base_path/}$sub_path"
+#    full_path=$(realpath ${full_path})
+#    echo $full_path
+# }
 
 
-REPO_CLONE="$(mktemp -d)/wsl-init"
-clone_repo(){
-  if [[ -d "$REPO_CLONE" ]]; then
-    echo "remove dir $REPO_CLONE"
-    with_sudo rm -rf "$REPO_CLONE"
-  fi
-  echo "cloning repo"
-  git clone --depth=1 --filter=blob:none --single-branch "$GITURL.git" $REPO_CLONE
-}
+# REPO_CLONE="$(mktemp -d)/wsl-init"
+# clone_repo(){
+#   if [[ -d "$REPO_CLONE" ]]; then
+#     echo "remove dir $REPO_CLONE"
+#     with_sudo rm -rf "$REPO_CLONE"
+#   fi
+#   echo "cloning repo"
+#   git clone --depth=1 --filter=blob:none --single-branch "$GITURL.git" $REPO_CLONE
+# }
 
-clean(){
-  with_sudo rm -rf "$REPO_CLONE"
-}
-update_configs(){
-  # .zshrc
-  wget -O "$HOME/.zshrc" "$GITRAWURL/main/confs/zshrc.template"
-  # .vimrc
-  wget -O "$HOME/.vimrc" "$GITRAWURL/main/confs/vimrc"
-  # .tmux.conf
-  wget -O "$HOME/.tmux.conf" "$GITRAWURL/main/confs/.tmux.conf"
-  # .zprofile
-  wget -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
-  # .ssh-config
-  mkdir -p "$HOME/.ssh"
-  wget -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
-  # starship.toml
-  mkdir -p "$HOME/.config"
-  wget -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
-}
+# clean(){
+#   with_sudo rm -rf "$REPO_CLONE"
+# }
+# update_configs(){
+#   # .zshrc
+#   wget -O "$HOME/.zshrc" "$GITRAWURL/main/confs/zshrc.template"
+#   # .vimrc
+#   wget -O "$HOME/.vimrc" "$GITRAWURL/main/confs/vimrc"
+#   # .tmux.conf
+#   wget -O "$HOME/.tmux.conf" "$GITRAWURL/main/confs/.tmux.conf"
+#   # .zprofile
+#   wget -O "$HOME/.zprofile" "$GITRAWURL/main/confs/.zprofile"
+#   # .ssh-config
+#   mkdir -p "$HOME/.ssh"
+#   wget -O "$HOME/.ssh/config" "$GITRAWURL/main/confs/ssh-config"
+#   # starship.toml
+#   mkdir -p "$HOME/.config"
+#   wget -O "$HOME/.config/starship.toml" "$GITRAWURL/main/confs/starship.toml"
+# }
 
-update_custom_functions(){
-  clone_repo 
-  funcs="$HOME/.zfunc"
-  cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
-  if [[ $1 == '-u' ]]; then
-    printf '%s You should freload your functions %s\n' $FMT_YELLOW $FMT_RESET
-  fi
-}
+# update_custom_functions(){
+#   clone_repo 
+#   funcs="$HOME/.zfunc"
+#   cp -rf "$REPO_CLONE/confs/.zfunc" "$HOME/"
+#   if [[ $1 == '-u' ]]; then
+#     printf '%s You should freload your functions %s\n' $FMT_YELLOW $FMT_RESET
+#   fi
+# }
 
 uninstall_ohmyzsh(){
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -174,7 +178,7 @@ setup_wsl(){
     printf '%s SKIP: Not WSL %s\n' $FMT_YELLOW $FMT_RESET
     return
   fi
-  wget -N -O "/etc/wsl.con" "$GITRAWURL/main/confs/wsl.conf"
+  wget -N -O "/etc/wsl.conf" "$GITRAWURL/main/wsl/wsl.conf"
   chmod 0764 /etc/wsl.conf
   chown root:root /etc/wsl.conf
   sed -i "s/{{user}}/$USER/g" /etc/wsl.conf
@@ -192,18 +196,18 @@ download_tmux_plugins(){
   fi
 }
 
-update_nvim_config(){
-  if [[ ! -d "$REPO_CLONE" ]]; then
-    echo "cloning repo"
-    clone_repo
-  fi
-  # avoid creating a useless subdir
-  if [[ -d "$HOME/.config/nvim" ]]; then
-    cp -rf "$REPO_CLONE/nvim" "$HOME/.config"
-  else
-    cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
-  fi
-}
+# update_nvim_config(){
+#   if [[ ! -d "$REPO_CLONE" ]]; then
+#     echo "cloning repo"
+#     clone_repo
+#   fi
+#   # avoid creating a useless subdir
+#   if [[ -d "$HOME/.config/nvim" ]]; then
+#     cp -rf "$REPO_CLONE/nvim" "$HOME/.config"
+#   else
+#     cp -rf "$REPO_CLONE/nvim" "$HOME/.config/nvim"
+#   fi
+# }
 
 install_starship(){
   set -u
@@ -240,70 +244,67 @@ install_eza(){
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | tee /etc/apt/sources.list.d/gierens.list
     chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    apt update
+    apt update -y
   fi
   if ! command_exists eza; then
     apt install -y eza
   fi
 }
 
-apply_dotfiles(){
+apply_chezmoi(){
   cd $HOME
-  chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
+  chezmoi init --apply "$DOTFILES_REPO" 
 }
 
 customize(){
-  download_tmux_plugins
-  update_nvim_config
-  update_custom_functions
+  #download_tmux_plugins
+  #update_nvim_config
+  #update_custom_functions
   install_zsh_autosuggestions
-}
-
-install_binaries(){
-  with_sudo install_deps
+  install_chezmoi
+  uninstall_ohmyzsh
   # zsh history setup
   mkdir -p "$HOME/.cache/zsh"
   touch "$HOME/.cache/zsh/history"
   chmod -R 0600 "$HOME/.cache/zsh"
   chown -R $USER:$USER "$HOME/.cache/zsh"
+  apply_chezmoi
+}
 
+install_binaries(){
+  with_sudo install_deps
   uninstall_ohmyzsh
   install_starship
   install_zoxide
   with_sudo install_eza
   with_sudo setup_wsl
   install_zsh59
-  install_chezmoi
 }
 
 # The following code is in braces to ensure that the script does not run until it is
 # downloaded completely.
 {
+  local UPDATEONLY=false
   # Ability to run only updates
-  while getopts "uf" opt; do
+  while getopts "u" opt; do
     case $opt in
       u)
         echo "UPDATES ONLY"
-        update_configs
-        update_nvim_config
-        update_custom_functions -u
-        clean
-        exit
+        #update_configs
+        #update_nvim_config
+        #update_custom_functions -u
+        #clean
+        UPDATEONLY=true
         break
       ;;
-      f)
-        echo "Update custom functions"
-        update_custom_functions -u
-        clean
-        exit
-        break
-      ;;
-      ?)
+      ?|*)
       ;;
     esac
   done
 
-  install_binaries
+  if [[ "$UPDATEONLY" = false ]]; then
+    install_binaries
+  fi
 
   local continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
@@ -325,5 +326,5 @@ install_binaries(){
     customize
   fi
 
-  clean
+  #clean
 }

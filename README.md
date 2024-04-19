@@ -3,13 +3,13 @@
 You can use the install script in container or WSL
 
 ```bash
-curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
+curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/setup.sh | /bin/bash
 ```
 
 **run only updates**
 
 ```bash
-curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash -s -- -u
+curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/setup.sh | /bin/bash -s -- -u
 ```
 
 ## WSL setup
