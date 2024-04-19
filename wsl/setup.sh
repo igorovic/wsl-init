@@ -247,7 +247,7 @@ install_eza(){
   fi
 }
 
-install_dotfiles(){
+apply_dotfiles(){
   cd $HOME
   chezmoi init https://github.com/$GITHUB_USERNAME/dotfiles.git
 }
@@ -257,6 +257,23 @@ customize(){
   update_nvim_config
   update_custom_functions
   install_zsh_autosuggestions
+}
+
+install_binaries(){
+  with_sudo install_deps
+  # zsh history setup
+  mkdir -p "$HOME/.cache/zsh"
+  touch "$HOME/.cache/zsh/history"
+  chmod -R 0600 "$HOME/.cache/zsh"
+  chown -R $USER:$USER "$HOME/.cache/zsh"
+
+  uninstall_ohmyzsh
+  install_starship
+  install_zoxide
+  with_sudo install_eza
+  with_sudo setup_wsl
+  install_zsh59
+  install_chezmoi
 }
 
 # The following code is in braces to ensure that the script does not run until it is
@@ -286,21 +303,8 @@ customize(){
     esac
   done
 
-  with_sudo install_deps
-  # zsh history setup
-  mkdir -p "$HOME/.cache/zsh"
-  touch "$HOME/.cache/zsh/history"
-  chmod -R 0600 "$HOME/.cache/zsh"
-  chown -R $USER:$USER "$HOME/.cache/zsh"
+  install_binaries
 
-  uninstall_ohmyzsh
-  install_starship
-  install_zoxide
-  with_sudo install_eza
-  with_sudo setup_wsl
-  install_zsh59
-  install_chezmoi
-  
   local continue_as_root='N'
   if [[ "root" == "$(id -u -n)" ]]; then
     printf 'Your are running as %s %s %s\n' $FMT_RED 'root' $FMT_RESET
