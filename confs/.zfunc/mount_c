@@ -1,0 +1,6 @@
+# insde wsl mount c drive
+if [[ -z "$WSL_DISTRO_NAME" ]]; then
+  echo "Your are not in a WSL"
+  exit
+fi
+sudo mount -t drvfs C: /mnt/c
