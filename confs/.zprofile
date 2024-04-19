@@ -4,9 +4,10 @@ if $(command -v rg > /dev/null 2>&1); then
 fi
 # avoid to break ls command if eza fails installing
 if $(command -v eza > /dev/null 2>&1); then 
-    alias ls="eza"
+    alias ls="eza -lh"
+    alias ll="eza -lh --icons=always --color=auto --smart-group --no-time --git --no-filesize --no-user --no-permissions"
+
 fi
-alias ll="ls -lha"
 alias tmux="tmux -2u"
 alias vim="nvim"
 #alias vi="nvim"
