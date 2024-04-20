@@ -106,7 +106,7 @@ install_deps(){
     apt-get update -y
     apt-get upgrade -y
     apt-get install -y software-properties-common gcc make 
-    apt-get install -y jq git unzip tmux zsh ripgrep fzf wget gnupg2
+    apt-get install -y jq git unzip tmux zsh ripgrep wget gnupg2
     # for more recent version of neovim
     wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
     tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -165,6 +165,13 @@ install_deps(){
 #     printf '%s You should freload your functions %s\n' $FMT_YELLOW $FMT_RESET
 #   fi
 # }
+
+# install fzf from source for latest version
+install_fzf(){
+  cd "$HOME"
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install --all --no-bash --no-fish
+}
 
 uninstall_ohmyzsh(){
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -279,6 +286,7 @@ customize(){
   touch "$HOME/.cache/zsh/history"
   chmod -R 0600 "$HOME/.cache/zsh"
   chown -R $USER:$USER "$HOME/.cache/zsh"
+  install_fzf
   apply_chezmoi
 }
 
