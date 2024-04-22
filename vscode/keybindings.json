@@ -7,12 +7,8 @@
   },
   {
     "key": "ctrl+0",
-    "command": "workbench.action.lastEditorInGroup",
+    "command": "workbench.action.openNextRecentlyUsedEditor",
     "when": "terminalFocus"
-  },
-  {
-    "key": "ctrl+0",
-    "command": "-workbench.action.lastEditorInGroup"
   },
   {
     "key": "ctrl+[BracketRight]",
@@ -21,7 +17,7 @@
   },
   {
     "key": "ctrl+[BracketRight]",
-    "command": "workbench.action.lastEditorInGroup",
+    "command": "workbench.action.openNextRecentlyUsedEditor",
     "when": "filesExplorerFocus"
   },
   {
@@ -45,13 +41,11 @@
     "when": "filesExplorerFocus && !inputFocus"
   },
   {
-    // to terminate a terminal simply ctrl+D
     "key": "ctrl+shift+D",
     "command": "workbench.action.terminal.new",
     "when": "terminalFocus"
   },
   {
-    // hide terminal panel on Windows
     "key": "ctrl+X",
     "command": "workbench.action.togglePanel",
     "when": "terminalFocus"
