@@ -107,6 +107,8 @@ install_deps(){
     apt-get upgrade -y
     apt-get install -y software-properties-common gcc make 
     apt-get install -y jq git unzip tmux zsh ripgrep wget gnupg2
+    # we will install last fzf version from repo
+    apt autoremove -y fzf &>/dev/null
     # for more recent version of neovim
     wget -O /usr/bin/nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.9.5/nvim-linux64.tar.gz
     tar -xv -C /usr/bin/ -f /usr/bin/nvim-linux64.tar.gz
@@ -284,7 +286,9 @@ customize(){
   # zsh history setup
   mkdir -p "$HOME/.cache/zsh"
   touch "$HOME/.cache/zsh/history"
-  chmod -R 0600 "$HOME/.cache/zsh"
+  chmod 0700 "$HOME/.cache"
+  chmod 0700 "$HOME/.cache/zsh"
+  chmod 0600 "$HOME/.cache/zsh/history"
   chown -R $USER:$USER "$HOME/.cache/zsh"
   install_fzf
   apply_chezmoi
