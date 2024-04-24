@@ -92,5 +92,10 @@
     "key": "ctrl+alt+l",
     "command": "workbench.action.moveEditorToRightGroup",
     "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "shift+F1",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor",
+    "command": "editor.action.goToReferences"
   }
 ]
