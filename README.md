@@ -45,7 +45,7 @@ wsl -d <you-distro>
 
 ```bash
 # UID is necessary to grant access to ssh-agent socket
-docker build -t dyve/ubuntu-dev-base:latest --progress plain --build-arg "UID=${UID}" --file ./Docker/Dockerfile.ubuntu-dev-base .
+docker build -t dyve/ubuntu-dev-base:latest --progress plain --build-arg "UID=${UID}" --file ./Docker/ubuntu-dev-base.Dockerfile .
 # Build for nodejs with pnpm store from host
 docker build -t dyve/nodejs-dev:latest --progress plain --file ./Docker/node-pnpm.Dockerfile .
 ```
