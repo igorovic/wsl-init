@@ -47,7 +47,7 @@ wsl -d <you-distro>
 # UID is necessary to grant access to ssh-agent socket
 docker build -t dyve/ubuntu-dev-base:latest --progress plain --build-arg "UID=${UID}" --file ./Docker/ubuntu-dev-base.Dockerfile .
 # Build for nodejs with pnpm store from host
-docker build -t dyve/nodejs-dev:latest --progress plain --file ./Docker/node-pnpm.Dockerfile .
+docker build -t dyve/nodejs-dev:latest --progress plain --file ./Docker/nodejs.Dockerfile .
 ```
 
 ### Start container
@@ -64,18 +64,34 @@ dyve/ubuntu-dev-base:latest
 docker start -ia ubuntu-dev
 ```
 
-**nodejs dev**
+#### nodejs dev
+
+For node I prefer `pnpm` package manager to reduce overall disk uage.
+Since `pnpm` use a global store with hardlinks we need to create external docker volumes. This will help share the same pnpm store between multiple containers.
+
+**create volumes**
 
 ```bash
-docker run -it --name node-dev2 -p 3000-3020:3000-3020 \
---mount type=bind,source=./,target=/home/vscode/dev \
+docker volume create pnpm-store
+docker volume create pnpm-home
+```
+
+Docker volumes are managed by the docker daemon. Your docker daemon decides the disk location on your host machine.
+To find out the disk location run `docker volume inspect pnpm-store`
+
+Orbstack volumes [see notes below](#orbstack-volumes)
+
+```bash
+docker run -it --name node-dev -p 3000-3020:3000-3020 -p 5173:5173 -p 4321:4321 \
+--mount type=volume,source=pnpm-store,target=/home/vscode/.pnpm-store/v3 \
+--mount type=volume,source=pnpm-home,target=/home/vscode/.local/share/pnpm \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \
 dyve/nodejs-dev:latest
 ```
 
-**tauri dev**
+#### tauri dev
 
 ```bash
 docker run -it --name tauri-dev -p 5900:5900 \
@@ -155,8 +171,10 @@ pass init <your gpg id - output by gpg -k>
 
 ## Misc Notes
 
-### Ansible linter
+### Orbstack volumes
 
-- Files must have the `*.ansible.yaml` for the linter to activate. Otherwise it will be considered as a simple `.yaml` file.
-- Files inside `**/tasks/*` folder are recognized as `tasks definitions` by the ansible linter.
-- Files inside `playbooks/*` are recognized as `playbooks`
+When using Orbstack for containerization the docker volumes are created in a VM and mounted as a MAC OS volume. You can see the Orbastack volume in finder while Orbstack app is running.
+
+`docker volume inspect` may report disk location as `/var/lib/docker` but with Orbstack this is actually inside `Orbstack VM`.
+
+![finder volumes](assets/finder-volumes.png)

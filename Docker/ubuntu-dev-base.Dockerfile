@@ -78,6 +78,8 @@ RUN  /usr/bin/chezmoi init --apply igorovic
 # install tmux plugins
 RUN /home/vscode/.tmux/plugins/tpm/bin/install_plugins 
 RUN rm -rf /home/vscode/.oh-my-zsh
+# download and install nvim plugins
+RUN nvim --headless "+Lazy install" "+Lazy update" "+Lazy sync" +qa
 
 # #RUN curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
 CMD [ "/bin/zsh" ]
