@@ -72,8 +72,12 @@ Since `pnpm` use a global store with hardlinks we need to create external docker
 **create volumes**
 
 ```bash
+# global shared cache
 docker volume create pnpm-store
+# store for globally installed packages
 docker volume create pnpm-home
+# vscode-server for extensions in container and stuff
+docker volume create vscode-server
 ```
 
 Docker volumes are managed by the docker daemon. Your docker daemon decides the disk location on your host machine.
@@ -85,10 +89,23 @@ Orbstack volumes [see notes below](#orbstack-volumes)
 docker run -it --name node-dev -p 3000-3020:3000-3020 -p 5173:5173 -p 4321:4321 \
 --mount type=volume,source=pnpm-store,target=/home/vscode/.pnpm-store/v3 \
 --mount type=volume,source=pnpm-home,target=/home/vscode/.local/share/pnpm \
+--mount type=volume,source=vscode-server,target=/home/vscode/.vscode-server \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \
 dyve/nodejs-dev:latest
+```
+
+#### Bun
+
+```bash
+docker run -it --rm --name bun \
+--mount type=bind,source=./,target=/home/vscode/dev \
+--mount type=volume,source=vscode-server,target=/home/vscode/.vscode-server \
+-e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
+-e GIT_USER_EMAIL="$(git config user.email)" \
+-e GIT_USER_NAME="$(git config user.name)" \
+dyve/bun:latest
 ```
 
 #### tauri dev
@@ -96,6 +113,7 @@ dyve/nodejs-dev:latest
 ```bash
 docker run -it --name tauri-dev -p 5900:5900 \
 --mount type=bind,source=./,target=/home/vscode/dev \
+--mount type=volume,source=vscode-server,target=/home/vscode/.vscode-server \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \

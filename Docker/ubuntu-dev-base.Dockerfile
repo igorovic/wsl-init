@@ -65,7 +65,8 @@ RUN /bin/sh -c "$(curl -fsLS get.chezmoi.io)"
 ARG UID=1000
 ENV SSH_AUTH_SOCK=/ssh-agent
 RUN /usr/sbin/groupmod -g ${UID} vscode \
-    && /usr/sbin/usermod -u ${UID} -g ${UID} vscode
+    && /usr/sbin/usermod -u ${UID} -g ${UID} vscode \
+    && mkdir -p /home/vscode/.vscode-server
 RUN sudo chown -R ${UID}:${UID} /home/vscode
 RUN chsh -s /bin/zsh vscode
 
@@ -81,5 +82,4 @@ RUN rm -rf /home/vscode/.oh-my-zsh
 # download and install nvim plugins
 RUN nvim --headless "+Lazy install" "+Lazy update" "+Lazy sync" +qa
 
-# #RUN curl -sS https://raw.githubusercontent.com/igorovic/wsl-init/main/wsl/setup.sh | /bin/bash
 CMD [ "/bin/zsh" ]
