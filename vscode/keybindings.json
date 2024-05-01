@@ -1,6 +1,17 @@
 // Place your key bindings in this file to override the defaults
 [
   {
+    "key": "ctrl+[BracketRight]",
+    "command": "workbench.files.action.focusFilesExplorer",
+    "when": "!filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+[BracketRight]",
+    "command": "workbench.action.openNextRecentlyUsedEditor",
+    "when": "filesExplorerFocus"
+  },
+  // Terminal Navigation
+  {
     "key": "ctrl+0",
     "command": "terminal.focus",
     "when": "!terminalFocus"
@@ -11,25 +22,26 @@
     "when": "terminalFocus"
   },
   {
-    "key": "ctrl+[BracketRight]",
-    "command": "workbench.files.action.focusFilesExplorer",
-    "when": "!filesExplorerFocus"
-  },
-  {
-    "key": "ctrl+[BracketRight]",
-    "command": "workbench.action.openNextRecentlyUsedEditor",
-    "when": "filesExplorerFocus"
-  },
-  {
     "key": "ctrl+j",
     "command": "workbench.action.terminal.focusNext",
     "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
   },
   {
     "key": "ctrl+k",
-    "command": "workbench.action.terminal.focus",
+    "command": "workbench.action.terminal.focusPrevious",
     "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
   },
+  {
+    "key": "ctrl+shift+D",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+x",
+    "command": "workbench.action.togglePanel",
+    "when": "terminalFocus"
+  },
+  // File Explorer
   {
     "key": "a",
     "command": "explorer.newFile",
@@ -41,48 +53,52 @@
     "when": "filesExplorerFocus && !inputFocus"
   },
   {
-    "key": "ctrl+shift+D",
-    "command": "workbench.action.terminal.new",
-    "when": "terminalFocus"
+    "key": "r",
+    "command": "renameFile",
+    "when": "filesExplorerFocus && foldersViewVisible && !explorerResourceReadonly && !explorerResourceIsRoot && !inputFocus"
   },
-  {
-    "key": "ctrl+X",
-    "command": "workbench.action.togglePanel",
-    "when": "terminalFocus"
-  },
+  // Navigate
   {
     "key": "ctrl+H",
-    "command": "workbench.action.focusLeftGroup",
-    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    "command": "workbench.action.navigateLeft",
+    "when": "(editorTextFocus && vim.active && vim.mode == 'Normal') || filesExplorerFocus"
   },
   {
     "key": "ctrl+l",
-    "command": "workbench.action.focusRightGroup",
+    "command": "workbench.action.navigateRight",
     "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
   },
   {
     "key": "ctrl+j",
-    "command": "workbench.action.focusBelowGroup",
+    "command": "workbench.action.navigateDown",
     "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
   },
   {
     "key": "ctrl+k",
-    "command": "workbench.action.focusAboveGroup",
+    "command": "workbench.action.navigateUp",
     "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
   },
-  // Navigate editor tabs with vim motions like
   {
-    "key": "ctrl+shift+l",
-    "command": "workbench.action.nextEditor"
+    "key": "ctrl+h",
+    "command": "-extension.vim_ctrl+h",
+    "when": "editorTextFocus && vim.active && vim.use<C-h> && !inDebugRepl"
   },
   {
-    "key": "alt+cmd+right",
-    "command": "-workbench.action.nextEditor"
+    "key": "ctrl+h",
+    "command": "-editor.action.startFindReplaceAction",
+    "when": "editorFocus || editorIsOpen"
   },
   {
-    "key": "ctrl+shift+h",
-    "command": "workbench.action.previousEditor"
+    "key": "tab",
+    "command": "workbench.action.nextEditor",
+    "when": "vim.active && vim.mode == 'Normal'"
   },
+  {
+    "key": "shift+tab",
+    "command": "workbench.action.previousEditor",
+    "when": "vim.active && vim.mode == 'Normal'"
+  },
+  // Move Editor 
   {
     "key": "ctrl+alt+h",
     "command": "workbench.action.moveEditorToLeftGroup",
@@ -97,5 +113,36 @@
     "key": "shift+F1",
     "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor",
     "command": "editor.action.goToReferences"
+  },
+  // Code Action
+  {
+    "key": "shift+j",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "vim.active && vim.mode != 'Insert' && editorTextFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "editor.action.showHover",
+    "when": "vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "shift+k",
+    "command": "editor.action.showHover",
+    "when": "vim.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "space c a",
+    "command": "editor.action.codeAction",
+    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
+  },
+  {
+    "key": "space c s",
+    "command": "workbench.action.gotoSymbol",
+    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
+  },
+  {
+    "key": "space g g",
+    "command": "workbench.scm.focus",
+    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
   }
 ]
