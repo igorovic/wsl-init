@@ -123,26 +123,26 @@
   {
     "key": "ctrl+k",
     "command": "editor.action.showHover",
-    "when": "vim.active && vim.mode == 'Normal'"
+    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
   {
     "key": "shift+k",
     "command": "editor.action.showHover",
-    "when": "vim.active && vim.mode == 'Normal'"
+    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
   {
     "key": "space c a",
     "command": "editor.action.codeAction",
-    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
+    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
   {
     "key": "space c s",
     "command": "workbench.action.gotoSymbol",
-    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
+    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
   {
     "key": "space g g",
     "command": "workbench.scm.focus",
-    "when": "vim.active && vim.mode == 'Normal' && editorFocus"
+    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   }
 ]
