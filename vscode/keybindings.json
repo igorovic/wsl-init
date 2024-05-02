@@ -121,12 +121,12 @@
     "when": "vim.active && vim.mode != 'Insert' && editorTextFocus"
   },
   {
-    "key": "ctrl+k",
-    "command": "editor.action.showHover",
+    "key": "shift+k",
+    "command": "editor.action.moveLinesUpAction",
     "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
   {
-    "key": "shift+k",
+    "key": "ctrl+k",
     "command": "editor.action.showHover",
     "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
   },
