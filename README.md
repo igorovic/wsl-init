@@ -90,6 +90,7 @@ docker run -it --name node-dev -p 3000-3020:3000-3020 -p 5173:5173 -p 4321:4321 
 --mount type=volume,source=pnpm-store,target=/home/vscode/.pnpm-store/v3 \
 --mount type=volume,source=pnpm-home,target=/home/vscode/.local/share/pnpm \
 --mount type=volume,source=vscode-server,target=/home/vscode/.vscode-server \
+--mount type=volume,source=projects,target=/home/vscode/projects \
 -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" \
 -e GIT_USER_EMAIL="$(git config user.email)" \
 -e GIT_USER_NAME="$(git config user.name)" \
