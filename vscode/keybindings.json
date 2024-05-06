@@ -123,7 +123,7 @@
   {
     "key": "shift+k",
     "command": "editor.action.moveLinesUpAction",
-    "when": "vim.active && vim.mode == 'Normal' && editorTextFocus"
+    "when": "vim.active && vim.mode != 'Insert' && editorTextFocus"
   },
   {
     "key": "ctrl+k",
