@@ -97,6 +97,14 @@ docker run -it --name node-dev -p 3000-3020:3000-3020 -p 5173:5173 -p 4321:4321 
 dyve/nodejs-dev:latest
 ```
 
+**To restart container when need to change source of `SSH_AUTH_SOCK`**
+
+```bash
+docker commit --message "change env vars" <container> <image:tag> \
+&& docker rm <container> \
+&& docker run -it --name <container> -e SSH_AUTH_SOCK=/ssh-agent -v "${SSH_AUTH_SOCK}:/ssh-agent" <image:tag>
+```
+
 #### Bun
 
 ```bash
